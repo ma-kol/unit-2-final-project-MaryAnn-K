@@ -6,8 +6,11 @@ function App() {
 
   return (
     <>
-    <div>
+    <div id="body-container">
       <Header />
+      <main>
+        
+      </main>
       <Footer />
       </div>
     </>
