@@ -1,0 +1,43 @@
+footer {
+    background-color: #1e1e1e;
+    color: #f5f5f5;
+    border-top: 4px solid #b30000;
+    border-bottom: 4px solid #b30000;
+    position: relative;
+}
+
+main {
+    flex: 1;
+}
+
+h1 {
+    font-family: 'Impact', 'Anton', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 50px;
+    text-align: center;
+}
+
+#body-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+#body-container {
+    position: relative;
+    background-image: url('./assets/boxing-gloves-background.jpg'); /* Photo credit: Photo by Mikhail Nilov: https://www.pexels.com/photo/pair-of-boxing-gloves-on-gray-surface-6739946/ */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* Photo credit for boxing ring: Photo by Vladimir Srajber from Pexels: https://www.pexels.com/photo/boxing-ring-inside-a-gym-14856113/ */

@@ -1,9 +1,11 @@
-const Header = () => {
+import NavMenu from "./NavMenu";
+import '../layout/layout.css';
+
+const Header = ({ setCurrentPage }) => {
     return (
         <header>
-            <div>
-                Boxing Mindset
-            </div>
+            <h1>Boxing Mindset</h1>
+            <NavMenu setCurrentPage={setCurrentPage} />
         </header>
     );
 };
