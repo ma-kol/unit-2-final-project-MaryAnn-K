@@ -4,6 +4,7 @@ footer {
     border-top: 4px solid #b30000;
     border-bottom: 4px solid #b30000;
     position: relative;
+    text-align: center;
 }
 
 main {
@@ -14,7 +15,7 @@ h1 {
     font-family: 'Impact', 'Anton', sans-serif;
     text-transform: uppercase;
     letter-spacing: 2px;
-    font-size: 50px;
+    font-size: 55px;
     text-align: center;
 }
 
