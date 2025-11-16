@@ -42,6 +42,32 @@ li:hover {
     cursor: pointer;
 }
 
+/* Hero Styling */
+.hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.hero-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: red;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 50px;
+    border-radius: 8px;
+}
+
 /* Tablet breakpoint */
 @media (max-width: 1024px) {
     .hamburger-nav {
