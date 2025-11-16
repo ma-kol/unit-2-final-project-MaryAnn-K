@@ -1,7 +1,6 @@
-const HomePage = ({ setCurrentPage }) => {
+const HomePage = ({ currentPage }) => {
     return (
         <main>
-    
         </main>
     )
 }
