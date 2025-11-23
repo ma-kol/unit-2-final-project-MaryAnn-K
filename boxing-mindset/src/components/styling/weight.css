@@ -1,0 +1,41 @@
+.weight-header {
+    color: gold;
+    position: relative;
+    font-size: 50px;
+}
+
+.weight-container {
+    text-align: center;
+    padding: 50px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.weight-container input,
+.weight-container select {
+    max-width: 400px;
+    width: 100%;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 10px auto;
+    display: block;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.gender-dropdown {
+    position: relative;
+}
+
+.current-weight-dropdown {
+    position: relative;
+}
+
+.target-weight-dropdown {
+    position: relative;
+}
+
+.get-status {
+    position: relative;
+    color: white;
+    font-size: 20px;
+}
