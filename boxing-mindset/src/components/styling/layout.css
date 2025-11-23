@@ -1,5 +1,5 @@
 header {
-    background-color: #1e1e1e;
+    background-color: black;
     color: #f5f5f5;
     border-top: 4px solid #b30000;
     border-bottom: 4px solid #b30000;
@@ -12,26 +12,31 @@ ul {
     list-style: none;
     margin: 0;
     padding: 0;
-    gap: 20px;
-}
-
-
-li {
-    padding: 5px;
-    color: white;
-    cursor: pointer;
-    text-transform: uppercase;
-}
-
-li:hover {
-    color: #b30000;
+    gap: 25px;
 }
 
 .nav-styles {
     display: flex;
     justify-content: center;
     position: relative;
-    padding: 10px 20px;
+    padding: 15px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-family: 'Arial';
+}
+
+.nav-styles a:link,
+.nav-styles a:visited {
+    color: royalblue;
+    text-decoration: none;
+}
+
+.nav-styles a:hover {
+    color: gold;
+}
+
+.nav-styles a:active {
+    color: white;
 }
 
 .hamburger-nav {
@@ -66,6 +71,34 @@ li:hover {
     background: rgba(0, 0, 0, 0.4);
     padding: 50px;
     border-radius: 8px;
+    font-size: 40px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.hero-message {
+    color: white;
+    font-size: 30px;
+}
+
+.learn-more-button {
+    color: white;
+    background-color: royalblue;
+    padding: 5px;
+    width: 150px;
+    height: 40px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.footer-contact-link {
+    text-decoration: none;
+    color: white;
+    font-family: Arial;
+}
+
+.footer-contact-link:hover {
+    color: gold;
 }
 
 /* Tablet breakpoint */
@@ -74,15 +107,16 @@ li:hover {
         display: block;
     }
 
+
     .nav-styles ul {
         display: none;
-        background-color: #1e1e1e;
+        background-color: black;
         flex-direction: column;
-        position: absolute;
         top: 100%;
         left: 0;
         width: 100%;
         padding: 10px 0;
+        position: relative;
     }
 
     .nav-styles ul.show {
