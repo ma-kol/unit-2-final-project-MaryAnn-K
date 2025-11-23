@@ -1,4 +1,5 @@
 import Hero from "../layout/Hero";
+
 const HomePage = ({ currentPage }) => {
     return (
         <main>

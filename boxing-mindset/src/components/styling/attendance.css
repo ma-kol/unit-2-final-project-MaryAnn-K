@@ -1,0 +1,73 @@
+.attendance-container {
+    text-align: center;
+    padding: 50px;
+    position: relative;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.attendance-header {
+    color: royalblue;
+    font-size: 50px;
+}
+
+.boxing-class-name input {
+    max-width: 400px;
+    width: 100%;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 10px auto;
+    display: block;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.add-class-button {
+    background-color: green;
+    color: black;
+    padding: 3px;
+    margin: 10px;
+    width: 60px;
+    height: 40px;
+    font-size: 14px;
+    border-radius: 8px;
+}
+
+.delete-button {
+    background-color: red;
+    color: black;
+    padding: 3px;
+    margin: 10px;
+    width: 60px;
+    height: 40px;
+    font-size: 14px;
+    border-radius: 8px;
+}
+
+.edit-button {
+    background-color: gold;
+    color: black;
+    padding: 3px;
+    margin: 10px;
+    width: 60px;
+    height: 40px;
+    font-size: 14px;
+    border-radius: 8px;
+
+}
+
+.save-button {
+    background-color: green;
+    color: black;
+    padding: 3px;
+    margin: 10px;
+    width: 60px;
+    height: 40px;
+    font-size: 14px;
+    border-radius: 8px;
+}
+
+.class-attendance-list {
+    color: white;
+    justify-content: center;
+    display: block;
+}
