@@ -5,8 +5,8 @@ import Button from '../layout/Button';
 const ClassAttendancePage = () => {
 
     const [classes, setClasses] = useState([
-        { name: "Boxing Basics (Adults)", date: "2025-11-24" },
-        { name: "Advanced Boxing (Adults)", date: "2025-11-25" }
+        { name: "Boxing Basics (Adults)", date: "2025-11-24", attending: false },
+        { name: "Advanced Boxing (Adults)", date: "2025-11-25", attending: false }
     ]);
 
     const [newClass, setNewClass] = useState({ name: "", date: "" });
@@ -16,7 +16,7 @@ const ClassAttendancePage = () => {
     // Add Class Function
     const handleAdd = () => {
         if (newClass.name && newClass.date) {
-            setClasses([...classes, newClass]); // adds class to new class
+            setClasses([...classes, { ...newClass, attending: false }]); // adds class to new class
             setNewClass({ name: "", date: "" }); // resets input field
         }
     };
@@ -35,6 +35,13 @@ const ClassAttendancePage = () => {
         setClasses(updated);
         setEditIndex(null);
         setEditClass({ name: "", date: "" });
+    };
+
+    // Toggle Attendance
+    const toggleAttendance = (index) => {
+        const updated = [...classes];
+        updated[index].attending = !updated[index].attending;
+        setClasses(updated);
     };
 
     return (
@@ -71,6 +78,7 @@ const ClassAttendancePage = () => {
                     <tr>
                         <th>Class Name</th>
                         <th>Date</th>
+                        <th>Attending?</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -98,6 +106,9 @@ const ClassAttendancePage = () => {
                                         />
                                     </td>
                                     <td>
+                                        {editClass.attending ? "Yes" : "No"}
+                                    </td>
+                                    <td>
                                         <Button
                                             label="Save"
                                             onClick={() => handleSaveEdit(index)}
@@ -109,7 +120,15 @@ const ClassAttendancePage = () => {
                                 <>
                                     <td>{x.name}</td>
                                     <td>{x.date}</td>
+                                    <td>{x.attending ? "✅ Yes" : "❌ No"}</td>
                                     <td>
+                                        <Button
+                                            label="Attend"
+                                            className='attend-button'
+                                            onClick={() =>
+                                                toggleAttendance(index)
+                                            }
+                                        />
                                         <Button
                                             label="Edit"
                                             className="edit-button"
