@@ -29,6 +29,14 @@
 .timer-title {
     font-size: 30px;
     font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.timer-user-input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px auto;
+    display: block;
 }
 
 .start-button {
