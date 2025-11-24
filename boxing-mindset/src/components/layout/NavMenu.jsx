@@ -1,6 +1,6 @@
+import '../styling/layout.css';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../styling/layout.css';
 
 const NavMenu = ({ setCurrentPage }) => {
     const [menuOpen, setMenuOpen] = useState(false);

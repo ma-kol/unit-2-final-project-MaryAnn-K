@@ -1,5 +1,5 @@
-import NavMenu from "./NavMenu";
 import '../styling/layout.css';
+import NavMenu from "./NavMenu";
 
 const Header = ({ setCurrentPage }) => {
     return (

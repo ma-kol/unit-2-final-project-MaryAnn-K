@@ -1,0 +1,95 @@
+.attendance-container {
+    text-align: center;
+    padding: 50px;
+    position: relative;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.attendance-header {
+    color: royalblue;
+    font-size: 50px;
+}
+
+.boxing-class-name input {
+    max-width: 400px;
+    width: 100%;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 10px auto;
+    display: block;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.add-class-button {
+    background-color: green;
+    color: black;
+    padding: 3px;
+    margin: 10px;
+    width: 90px;
+    height: 40px;
+    font-size: 14px;
+    border-radius: 8px;
+}
+
+.delete-button {
+    background-color: red;
+    color: black;
+    padding: 3px;
+    margin: 10px;
+    width: 60px;
+    height: 40px;
+    font-size: 14px;
+    border-radius: 8px;
+}
+
+.edit-button {
+    background-color: gold;
+    color: black;
+    padding: 3px;
+    margin: 10px;
+    width: 60px;
+    height: 40px;
+    font-size: 14px;
+    border-radius: 8px;
+
+}
+
+.save-button {
+    background-color: green;
+    color: black;
+    padding: 3px;
+    margin: 10px;
+    width: 60px;
+    height: 40px;
+    font-size: 14px;
+    border-radius: 8px;
+}
+
+.class-attendance-table {
+    color: white;
+    justify-content: center;
+    display: block;
+    width: 50%;
+    margin: 20px auto;
+}
+
+.class-attendance-table th, .class-attendance-table td {
+    border: white solid 2px;
+    padding: 10px;
+}
+
+.class-attendance-table th {
+    font-weight: bold;
+}
+
+.fade-in {
+    opacity: 0;
+    animation: fadeIn 0.8s forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
