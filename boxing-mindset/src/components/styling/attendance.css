@@ -3,6 +3,9 @@
     padding: 50px;
     position: relative;
     font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .attendance-header {
@@ -43,6 +46,17 @@
     border-radius: 8px;
 }
 
+.attend-button {
+    background-color: royalblue;
+    color: black;
+    padding: 3px;
+    margin: 10px;
+    width: 60px;
+    height: 40px;
+    font-size: 14px;
+    border-radius: 8px;
+}
+
 .edit-button {
     background-color: gold;
     color: black;
@@ -70,8 +84,11 @@
     color: white;
     justify-content: center;
     display: block;
-    width: 50%;
+    width: 100%;
+    max-width: 600px;
     margin: 20px auto;
+    border-collapse: collapse;
+    display: table;
 }
 
 .class-attendance-table th, .class-attendance-table td {
