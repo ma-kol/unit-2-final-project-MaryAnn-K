@@ -66,56 +66,71 @@ const ClassAttendancePage = () => {
                 className="add-class-button"
             />
 
-            <ul className="class-attendance-list">
-                {classes.map((x, index) =>
-                    <li key={index}>
-                        {editIndex === index ? ( // if current class is edited, show edit mode : else show normal mode with edit and delete buttons
-                            <>
-                                <input
-                                    type="text"
-                                    value={editClass.name}
-                                    onChange={(e) => setEditClass({
-                                        ...editClass, name: e.target.value
-                                    })}
-                                />
+            <table className="class-attendance-table">
+                <thead>
+                    <tr>
+                        <th>Class Name</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {classes.map((x, index) =>
+                        <tr key={index} className='fade-in'>
+                            {editIndex === index ? ( // if current class is edited, show edit mode : else show normal mode with edit and delete buttons
+                                <>
+                                    <td>
+                                        <input
+                                            type="text"
+                                            value={editClass.name}
+                                            onChange={(e) => setEditClass({
+                                                ...editClass, name: e.target.value
+                                            })}
+                                        />
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="date"
+                                            value={editClass.date}
+                                            onChange={(e) => setEditClass({
+                                                ...editClass, date: e.target.value
+                                            })}
+                                        />
+                                    </td>
+                                    <td>
+                                        <Button
+                                            label="Save"
+                                            onClick={() => handleSaveEdit(index)}
+                                            className='save-button'
+                                        />
+                                    </td>
+                                </>
+                            ) : ( // else block (normal mode)
+                                <>
+                                    <td>{x.name}</td>
+                                    <td>{x.date}</td>
+                                    <td>
+                                        <Button
+                                            label="Edit"
+                                            className="edit-button"
+                                            onClick={() => {
+                                                setEditIndex(index);
+                                                setEditClass(x);
+                                            }}
+                                        />
 
-                                <input
-                                    type="date"
-                                    value={editClass.date}
-                                    onChange={(e) => setEditClass({
-                                        ...editClass, date: e.target.value
-                                    })}
-                                />
-
-                                <Button
-                                    label="Save"
-                                    onClick={() => handleSaveEdit(index)}
-                                    className='save-button'
-                                />
-                            </>
-                        ) : ( // else block (normal mode)
-                            <>
-                                {x.name} | {x.date}
-                                <Button
-                                    label="Edit"
-                                    className="edit-button"
-                                    onClick={() => {
-                                        setEditIndex(index);
-                                        setEditClass(x);
-                                    }}
-                                />
-
-                                <Button
-                                    label="Delete"
-                                    onClick={() => handleDelete(index)}
-                                    className="delete-button"
-                                />
-                            </>
-                        )}
-                    </li>
-                )}
-            </ul>
-
+                                        <Button
+                                            label="Delete"
+                                            onClick={() => handleDelete(index)}
+                                            className="delete-button"
+                                        />
+                                    </td>
+                                </>
+                            )}
+                        </tr>
+                    )}
+                </tbody>
+            </table>
         </div >
     )
 }
