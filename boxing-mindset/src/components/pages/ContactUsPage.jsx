@@ -1,6 +1,7 @@
 import '../styling/contact.css'
 import { useState } from 'react';
 import Button from '../layout/Button';
+import FormField from '../child/FormField';
 
 const ContactUsPage = () => {
 
@@ -46,8 +47,8 @@ const ContactUsPage = () => {
         <div className="contact-container">
             <h2 className="contact-header">Contact Us</h2>
             <form onSubmit={handleSubmit} className="contact-form">
-                <label htmlFor="name">Name:</label>
-                <input
+                <FormField
+                    label="name"
                     type="text"
                     id="name"
                     name="name"
@@ -58,8 +59,8 @@ const ContactUsPage = () => {
 
                 <br />
 
-                <label htmlFor="email">Email:</label>
-                <input
+                <FormField
+                    label="email"
                     type="text"
                     id="email"
                     name="email"
@@ -70,9 +71,9 @@ const ContactUsPage = () => {
 
                 <br />
 
-                <label htmlFor="phone">Phone Number:</label>
-                <input
-                    type="tel"
+                <FormField
+                    label="phone"
+                    type="phone"
                     id="phone"
                     name="phone"
                     value={formData.phone}
@@ -82,8 +83,10 @@ const ContactUsPage = () => {
 
                 <br />
 
-                <label htmlFor="message">Message:</label>
-                <textarea
+                <FormField
+                    textarea
+                    label="message"
+                    type="textarea"
                     id="message"
                     name="message"
                     value={formData.message}

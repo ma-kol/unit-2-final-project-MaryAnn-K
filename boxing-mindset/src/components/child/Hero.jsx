@@ -1,6 +1,6 @@
 import boxingVideo from '/videos/boxing-video.mp4';
 import { Link } from 'react-router-dom';
-import Button from './Button';
+import Button from '../layout/Button';
 
 const Hero = () => {
     return (

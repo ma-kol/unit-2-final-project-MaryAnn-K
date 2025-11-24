@@ -1,4 +1,4 @@
-import Hero from "../layout/Hero";
+import Hero from "../child/Hero";
 
 const HomePage = ({ currentPage }) => {
     return (
