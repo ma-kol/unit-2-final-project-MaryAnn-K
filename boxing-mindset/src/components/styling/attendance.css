@@ -129,7 +129,6 @@
     .class-attendance-table th,
     .class-attendance-table td,
     .class-attendance-table tr {
-        display: block;
         width: 100%;
     }
 }
