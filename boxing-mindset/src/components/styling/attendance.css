@@ -1,11 +1,13 @@
 .attendance-container {
     text-align: center;
-    padding: 50px;
+    padding: 20px;
     position: relative;
     font-family: Arial, Helvetica, sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .attendance-header {
@@ -85,13 +87,14 @@
     justify-content: center;
     display: block;
     width: 100%;
-    max-width: 600px;
+    max-width: 100%;
     margin: 20px auto;
     border-collapse: collapse;
     display: table;
 }
 
-.class-attendance-table th, .class-attendance-table td {
+.class-attendance-table th,
+.class-attendance-table td {
     border: white solid 2px;
     padding: 10px;
 }
@@ -108,5 +111,25 @@
 @keyframes fadeIn {
     to {
         opacity: 1;
+    }
+}
+
+@media (max-width: 600px) {
+    .attendance-container {
+        padding: 10px;
+    }
+
+    .boxing-class-name input {
+        width: 100%;
+    }
+
+    .class-attendance-table,
+    .class-attendance-table thead,
+    .class-attendance-table tbody,
+    .class-attendance-table th,
+    .class-attendance-table td,
+    .class-attendance-table tr {
+        display: block;
+        width: 100%;
     }
 }
