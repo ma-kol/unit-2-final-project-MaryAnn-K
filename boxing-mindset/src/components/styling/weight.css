@@ -2,13 +2,14 @@
     color: white;
     position: relative;
     font-size: 50px;
-    word-break: break-word;
 }
 
 .weight-container {
     text-align: center;
     padding: 50px;
     font-family: Arial, Helvetica, sans-serif;
+    max-width: 600px;
+    width: 100%;
 }
 
 .weight-container input,
