@@ -2,6 +2,7 @@
     color: white;
     position: relative;
     font-size: 50px;
+    max-width: 600px;
 }
 
 .weight-container {
