@@ -33,11 +33,11 @@
 }
 
 .timer-user-input {
-    width: 80%;
-    padding: 8px;
+    width: 90%;
+    padding: 6px;
     margin: 10px auto;
     display: block;
-    max-width: 250px;
+    max-width: 160px;
     box-sizing: border-box;
 }
 
@@ -80,6 +80,6 @@
     }
 
     .timer-user-input {
-        max-width: 180px;
+        max-width: 140px;
     }
 }
