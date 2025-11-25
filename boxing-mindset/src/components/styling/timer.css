@@ -33,10 +33,11 @@
 }
 
 .timer-user-input {
-    width: 100%;
+    width: 80%;
     padding: 10px;
     margin: 10px auto;
     display: block;
+    max-width: 300px;
 }
 
 .start-button {
