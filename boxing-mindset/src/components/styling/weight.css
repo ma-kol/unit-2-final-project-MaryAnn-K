@@ -2,6 +2,7 @@
     color: white;
     position: relative;
     font-size: 50px;
+    word-break: break-word;
 }
 
 .weight-container {
@@ -38,10 +39,4 @@
     position: relative;
     color: white;
     font-size: 20px;
-}
-
-@media (max-width: 480px) {
-    .weight-header {
-        font-size: 28px;
-    }
 }
