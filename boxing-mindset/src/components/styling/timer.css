@@ -38,6 +38,7 @@
     margin: 10px auto;
     display: block;
     max-width: 300px;
+    box-sizing: border-box;
 }
 
 .start-button {
@@ -71,4 +72,10 @@
     height: 40px;
     font-size: 14px;
     border-radius: 8px;
+}
+
+@media (max-width: 480px) {
+    .timer {
+        padding: 20px;
+    }
 }
