@@ -1,5 +1,6 @@
 package org.launchcode.boxing_mindset_backend.controllers;
 
+import org.launchcode.boxing_mindset_backend.dto.WeighInDTO;
 import org.launchcode.boxing_mindset_backend.models.User;
 import org.launchcode.boxing_mindset_backend.models.WeighIn;
 import org.launchcode.boxing_mindset_backend.repositories.UserRepository;
@@ -34,17 +35,17 @@ public class WeighInController {
     }
 
     @PostMapping("/add")
-    public String addWeighIn(@RequestParam int userId, @RequestParam double weight, @RequestParam(required = false) String notes) {
+    public String addWeighIn(@RequestBody WeighInDTO body) {
         {
-            User user = userRepository.findById(userId).orElse(null);
+            User user = userRepository.findById(body.userId).orElse(null);
             if (user == null) {
-                throw new IllegalArgumentException("User with ID " + userId + " not found.");
+                throw new IllegalArgumentException("User with ID " + body.userId + " not found.");
             }
             WeighIn newWeighIn = new WeighIn();
             newWeighIn.setUser(user);
-            newWeighIn.setDate(LocalDate.now());
-            newWeighIn.setWeight(weight);
-            newWeighIn.setNotes(notes);
+            newWeighIn.setDate(body.date);
+            newWeighIn.setWeight(body.weight);
+            newWeighIn.setNotes(body.notes);
             weighInRepository.save(newWeighIn);
             return "New weight of " + newWeighIn + " added and recorded successfully.";
         }
