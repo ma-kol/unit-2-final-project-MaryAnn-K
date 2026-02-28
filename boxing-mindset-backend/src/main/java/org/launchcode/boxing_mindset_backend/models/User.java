@@ -1,21 +1,24 @@
 package org.launchcode.boxing_mindset_backend.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
 
 @Entity
+@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(name = "username", length = 255)
     private String username;
+
+    @Column(name = "email", length = 255)
     private String email;
+
+    @Column(name = "created_at")
     private OffsetDateTime createdAt = OffsetDateTime.now();
 
     // Default constructor for DB
