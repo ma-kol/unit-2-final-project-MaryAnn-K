@@ -14,6 +14,7 @@ const WeightManagementPage = () => {
     const [notes, setNotes] = useState('');
     const [date, setDate] = useState('');
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
 
     // Loads from backend
     useEffect(() => {
@@ -31,6 +32,16 @@ const WeightManagementPage = () => {
         })();
     }, []);
 
+    // Hides success message after 5 seconds
+    useEffect(() => {
+        if (success) {
+            const timer = setTimeout(() => {
+                setSuccess('');
+            }, 5000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [success]);
 
     const mensWeightClasses = [
         { name: 'Bantamweight', max: 121 },
@@ -74,9 +85,9 @@ const WeightManagementPage = () => {
     }
 
     async function saveWeighIn(e) {
-        console.log("Weight saved and recorded!");
         e.preventDefault()
         setError('')
+        setSuccess('');
 
         const lbs = Number(currentWeight)
         if (!lbs || lbs <= 0) {
@@ -95,8 +106,12 @@ const WeightManagementPage = () => {
             if (!latest || new Date(saved.date) >= new Date(latest.date)) {
                 setLatest(saved);
             }
+
+            setSuccess("Weight has been successfully recorded! 🥊 ");
+
             setDate('');
             setNotes('');
+            setCurrentWeight('');
         } catch (e) {
             setError(e.message);
         }
@@ -165,11 +180,13 @@ const WeightManagementPage = () => {
                         placeholder="Enter the date"
                     />
                 </div>
-                  <Button
+                <Button
                     type="submit"
                     label="Save Weight"
                     disabled={!currentWeight || Number(currentWeight) <= 0}
                 />
+                {success && <div className="success-message">{success}</div>}
+                {error && <div className="error-message">{error}</div>}
             </form>
 
         </div>
