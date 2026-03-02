@@ -1,10 +1,36 @@
 import '../styling/weight.css'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { getWeighInsForUser, getLatestWeighIn, createWeighIn } from '../../api/weighins';
+import Button from '../layout/Button';
+
+const USER_ID = 1;
 
 const WeightManagementPage = () => {
     const [currentWeight, setCurrentWeight] = useState('');
     const [gender, setGender] = useState('');
     const [targetWeightClass, setTargetWeightClass] = useState('');
+    const [history, setHistory] = useState([]);
+    const [latest, setLatest] = useState(null);
+    const [notes, setNotes] = useState('');
+    const [date, setDate] = useState('');
+    const [error, setError] = useState('');
+
+    // Loads from backend
+    useEffect(() => {
+        (async () => {
+            try {
+                const [history, latest] = await Promise.all([
+                    getWeighInsForUser(USER_ID),
+                    getLatestWeighIn(USER_ID)
+                ]);
+                setHistory(history || []);
+                setLatest(latest || null);
+            } catch (e) {
+                setError(e.message);
+            }
+        })();
+    }, []);
+
 
     const mensWeightClasses = [
         { name: 'Bantamweight', max: 121 },
@@ -45,6 +71,34 @@ const WeightManagementPage = () => {
             return `You are ${Math.abs(weightDifference)} lbs. under ${targetWeightClass}.`;
         if (weightDifference === 0)
             return 'You are right on target! Get some rest and get ready to box!';
+    }
+
+    async function saveWeighIn(e) {
+        e.preventDefault()
+        setError('')
+
+        const lbs = Number(currentWeight)
+        if (!lbs || lbs <= 0) {
+            setError('Please enter a valid weight (lbs.).')
+            return
+        }
+        try {
+            const saved = await createWeighIn({
+                userId: USER_ID,
+                date: date || undefined,
+                notes: notes || undefined,
+                weight: lbs
+            });
+
+            setHistory(previous => [saved, ...previous]);
+            if (!latest || new Date(saved.date) >= new Date(latest.date)) {
+                setLatest(saved);
+            }
+            setDate('');
+            setNotes('');
+        } catch (e) {
+            setError(e.message);
+        }
     }
 
     return (
@@ -89,6 +143,34 @@ const WeightManagementPage = () => {
                 <br />
                 {getStatus()}
             </div>
+
+            <form onSubmit={saveWeighIn} className="weight-recording-form">
+                <div className="weighin-field">
+                    <label htmlFor="notes">Notes:</label>
+                    <input
+                        id="notes"
+                        value={notes}
+                        onChange={(e) => setNotes(e.target.value)}
+                        placeholder="Type your notes here..."
+                    />
+                </div>
+
+                <div className="weighin-field">
+                    <label htmlFor="date">Date (YYYY-MM-DD):</label>
+                    <input
+                        id="date"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                        placeholder="Enter the date"
+                    />
+                </div>
+                  <Button
+                    type="submit"
+                    label='Save Weight'
+                    disabled={Number(currentWeight) <= 0 || Number.isNaN(Number(currentWeight))}
+                />
+            </form>
+
         </div>
     )
 }
