@@ -74,6 +74,7 @@ const WeightManagementPage = () => {
     }
 
     async function saveWeighIn(e) {
+        console.log("Weight saved and recorded!");
         e.preventDefault()
         setError('')
 
@@ -166,7 +167,7 @@ const WeightManagementPage = () => {
                 </div>
                   <Button
                     type="submit"
-                    label='Save Weight'
+                    label="Save Weight"
                     disabled={!currentWeight || Number(currentWeight) <= 0}
                 />
             </form>
