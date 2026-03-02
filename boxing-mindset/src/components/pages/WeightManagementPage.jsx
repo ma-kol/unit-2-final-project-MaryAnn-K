@@ -167,7 +167,7 @@ const WeightManagementPage = () => {
                   <Button
                     type="submit"
                     label='Save Weight'
-                    disabled={Number(currentWeight) <= 0 || Number.isNaN(Number(currentWeight))}
+                    disabled={!currentWeight || Number(currentWeight) <= 0}
                 />
             </form>
 
