@@ -172,8 +172,9 @@ const WeightManagementPage = () => {
                 </div>
 
                 <div className="weighin-field">
-                    <label htmlFor="date">Date (YYYY-MM-DD):</label>
+                    <label htmlFor="date">Date:</label>
                     <input
+                        type='date'
                         id="date"
                         value={date}
                         onChange={(e) => setDate(e.target.value)}
@@ -188,7 +189,6 @@ const WeightManagementPage = () => {
                 {success && <div className="success-message">{success}</div>}
                 {error && <div className="error-message">{error}</div>}
             </form>
-
         </div>
     )
 }
