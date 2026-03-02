@@ -161,17 +161,7 @@ const WeightManagementPage = () => {
             </div>
 
             <form onSubmit={saveWeighIn} className="weight-recording-form">
-                <div className="weighin-field">
-                    <label htmlFor="notes">Notes:</label>
-                    <input
-                        id="notes"
-                        value={notes}
-                        onChange={(e) => setNotes(e.target.value)}
-                        placeholder="Type your notes here..."
-                    />
-                </div>
-
-                <div className="weighin-field">
+                 <div className="weighin-field">
                     <label htmlFor="date">Date:</label>
                     <input
                         type='date'
@@ -179,6 +169,15 @@ const WeightManagementPage = () => {
                         value={date}
                         onChange={(e) => setDate(e.target.value)}
                         placeholder="Enter the date"
+                    />
+                </div>
+                <div className="weighin-field">
+                    <label htmlFor="notes">Notes:</label>
+                    <input
+                        id="notes"
+                        value={notes}
+                        onChange={(e) => setNotes(e.target.value)}
+                        placeholder="Type your notes here..."
                     />
                 </div>
                 <Button
