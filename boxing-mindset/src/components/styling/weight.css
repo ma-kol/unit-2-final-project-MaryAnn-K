@@ -45,3 +45,10 @@
     color: white;
     font-size: 20px;
 }
+
+.recharts-container {
+    margin-top: 40px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 12px;
+}

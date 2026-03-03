@@ -2,7 +2,9 @@ import '../styling/weight.css'
 import { useState, useEffect } from 'react';
 import { getWeighInsForUser, getLatestWeighIn, createWeighIn } from '../../api/weighins';
 import Button from '../layout/Button';
+import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ReferenceLine, ResponsiveContainer } from "recharts";
 
+// Hardcoded for testing, change later
 const USER_ID = 1;
 
 const WeightManagementPage = () => {
@@ -66,6 +68,11 @@ const WeightManagementPage = () => {
     const weightClasses = gender === 'Men' ? mensWeightClasses : gender === 'Women' ? womensWeightClasses : [];
 
     const selectedClass = weightClasses.find(x => x.name === targetWeightClass);
+
+    // sort weights for recharts
+    const sortedHistory = [...history].sort(
+        (a, b) => new Date(a.date) - new Date(b.date)
+    );
 
     const getStatus = () => {
         if (!currentWeight || !selectedClass)
@@ -161,7 +168,7 @@ const WeightManagementPage = () => {
             </div>
 
             <form onSubmit={saveWeighIn} className="weight-recording-form">
-                 <div className="weighin-field">
+                <div className="weighin-field">
                     <label htmlFor="date">Date:</label>
                     <input
                         type='date'
@@ -188,7 +195,54 @@ const WeightManagementPage = () => {
                 {success && <div className="success-message">{success}</div>}
                 {error && <div className="error-message">{error}</div>}
             </form>
+            <div>
+                {sortedHistory.length > 0 && selectedClass && (
+                    <div className="recharts-container">
+                        <h3>Weight History & Progress</h3>
+
+                        <ResponsiveContainer width="100%" height={350}>
+                            <LineChart data={sortedHistory}>
+                                <CartesianGrid strokeDasharray="3 3" />
+
+                                <XAxis
+                                    dataKey="date"
+                                    tickFormatter={(date) =>
+                                        new Date(date).toLocaleDateString()
+                                    }
+                                />
+
+                                <YAxis />
+
+                                <Tooltip
+                                    labelFormatter={(date) =>
+                                        new Date(date).toLocaleDateString()
+                                    }
+                                />
+
+                                {selectedClass.max !== Infinity && (
+                                    <ReferenceLine
+                                        y={selectedClass.max}
+                                        stroke="green"
+                                        strokeDasharray="5 5"
+                                        label="Target"
+                                    />
+                                )}
+
+                                <Line
+                                    type="monotone"
+                                    dataKey="weight"
+                                    stroke="#e63946"
+                                    strokeWidth={3}
+                                    dot={{ r: 4 }}
+                                    activeDot={{ r: 8 }}
+                                />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </div>
+                )}
+            </div>
         </div>
+
     )
 }
 
