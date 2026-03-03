@@ -44,6 +44,7 @@
     position: relative;
     color: white;
     font-size: 20px;
+    margin-top: 20px;
 }
 
 .recharts-container {
@@ -51,4 +52,11 @@
     padding: 20px;
     background: #f8f9fa;
     border-radius: 12px;
+}
+
+.save-weight-button {
+    width: 150px;
+    height: 40px;
+    font-size: 16px;
+    border-radius: 8px;
 }

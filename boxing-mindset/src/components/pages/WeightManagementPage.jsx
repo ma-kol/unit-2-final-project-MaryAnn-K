@@ -191,6 +191,7 @@ const WeightManagementPage = () => {
                     type="submit"
                     label="Save Weight"
                     disabled={!currentWeight || Number(currentWeight) <= 0}
+                    className={"save-weight-button"}
                 />
                 {success && <div className="success-message">{success}</div>}
                 {error && <div className="error-message">{error}</div>}
