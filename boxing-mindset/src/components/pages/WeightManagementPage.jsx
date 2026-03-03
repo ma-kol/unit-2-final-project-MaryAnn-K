@@ -17,30 +17,38 @@ const WeightManagementPage = () => {
     const [date, setDate] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [role, setRole] = useState('user');
+    const [allUsersHistory, setAllUsersHistory] = useState([]);
 
     // Loads from backend
     useEffect(() => {
+        if (!USER_ID) return;
+
         (async () => {
             try {
-                const [history, latest] = await Promise.all([
-                    getWeighInsForUser(USER_ID),
-                    getLatestWeighIn(USER_ID)
-                ]);
-                setHistory(history || []);
-                setLatest(latest || null);
+                if (role === 'admin') {
+                    // Admin sees everyone’s weights
+                    const response = await fetch('http://localhost:8080/api/weigh-ins');
+                    const data = await response.json();
+                    setAllUsersHistory(data);
+                } else {
+                    const [history, latest] = await Promise.all([
+                        getWeighInsForUser(USER_ID),
+                        getLatestWeighIn(USER_ID)
+                    ]);
+                    setHistory(history || []);
+                    setLatest(latest || null);
+                }
             } catch (e) {
                 setError(e.message);
             }
         })();
-    }, []);
+    }, [role]);
 
     // Hides success message after 5 seconds
     useEffect(() => {
         if (success) {
-            const timer = setTimeout(() => {
-                setSuccess('');
-            }, 5000);
-
+            const timer = setTimeout(() => setSuccess(''), 5000);
             return () => clearTimeout(timer);
         }
     }, [success]);
@@ -52,8 +60,8 @@ const WeightManagementPage = () => {
         { name: 'Light Middleweight', max: 154 },
         { name: 'Light Heavyweight', max: 176 },
         { name: 'Heavyweight', max: 198 },
-        { name: 'Super Heavyweight', max: Infinity } // 198+
-    ]
+        { name: 'Super Heavyweight', max: Infinity }
+    ];
 
     const womensWeightClasses = [
         { name: 'Flyweight', max: 112 },
@@ -63,44 +71,35 @@ const WeightManagementPage = () => {
         { name: 'Welterweight', max: 143 },
         { name: 'Light Middleweight', max: 154 },
         { name: 'Middleweight', max: 165 }
-    ]
+    ];
 
     const weightClasses = gender === 'Men' ? mensWeightClasses : gender === 'Women' ? womensWeightClasses : [];
-
     const selectedClass = weightClasses.find(x => x.name === targetWeightClass);
-
-    // sort weights for recharts
-    const sortedHistory = [...history].sort(
-        (a, b) => new Date(a.date) - new Date(b.date)
-    );
+    // Sort weights for Recharts
+    const displayHistory = role === 'admin' ? allUsersHistory : history;
+    const sortedHistory = [...displayHistory].sort((a, b) => new Date(a.date) - new Date(b.date));
 
     const getStatus = () => {
-        if (!currentWeight || !selectedClass)
-            return '';
+        if (!currentWeight || !selectedClass) return '';
         if (selectedClass.max === Infinity) {
             return currentWeight > 198
-                ? 'You qualify for Super Heavyweight!' : `You need to gain ${198 - currentWeight} lbs to qualify for Super Heavyweight.`;
+                ? 'You qualify for Super Heavyweight!'
+                : `You need to gain ${198 - currentWeight} lbs. to qualify.`;
         }
-
-        const weightDifference = currentWeight - selectedClass.max;
-        if (weightDifference > 0)
-            return `You need to lose ${weightDifference} lbs. to make ${targetWeightClass}.`;
-        if (weightDifference < 0)
-            return `You are ${Math.abs(weightDifference)} lbs. under ${targetWeightClass}.`;
-        if (weightDifference === 0)
-            return 'You are right on target! Get some rest and get ready to box!';
-    }
+        const diff = currentWeight - selectedClass.max;
+        if (diff > 0) return `You need to lose ${diff} lbs. to make ${targetWeightClass}.`;
+        if (diff < 0) return `You are ${Math.abs(diff)} lbs. under ${targetWeightClass}.`;
+        return 'You are right on target! Get some rest and get ready to box!';
+    };
 
     async function saveWeighIn(e) {
-        e.preventDefault()
-        setError('')
+        e.preventDefault();
+        setError('');
         setSuccess('');
 
-        const lbs = Number(currentWeight)
-        if (!lbs || lbs <= 0) {
-            setError('Please enter a valid weight (lbs.).')
-            return
-        }
+        const lbs = Number(currentWeight);
+        if (!lbs || lbs <= 0) return setError('Please enter a valid weight (lbs.).');
+
         try {
             const saved = await createWeighIn({
                 userId: USER_ID,
@@ -108,17 +107,10 @@ const WeightManagementPage = () => {
                 notes: notes || undefined,
                 weight: lbs
             });
-
-            setHistory(previous => [saved, ...previous]);
-            if (!latest || new Date(saved.date) >= new Date(latest.date)) {
-                setLatest(saved);
-            }
-
-            setSuccess("Weight has been successfully recorded! 🥊 ");
-
-            setDate('');
-            setNotes('');
-            setCurrentWeight('');
+            setHistory(prev => [saved, ...prev]);
+            if (!latest || new Date(saved.date) >= new Date(latest.date)) setLatest(saved);
+            setSuccess("Weight has been successfully recorded! 🥊");
+            setDate(''); setNotes(''); setCurrentWeight('');
         } catch (e) {
             setError(e.message);
         }
@@ -127,6 +119,18 @@ const WeightManagementPage = () => {
     return (
         <div className="weight-container">
             <h2 className="weight-header">Weight Management</h2>
+            <div className="role-toggle">
+                <label className="switch">
+                    <input
+                        type="checkbox"
+                        checked={role === 'admin'}
+                        onChange={(e) => setRole(e.target.checked ? 'admin' : 'user')}
+                    />
+                    <span className="slider round"></span>
+                </label>
+                <span className="role-label">{role === 'admin' ? 'Admin' : 'User'}</span>
+            </div>
+
             <div className="gender-dropdown">
                 <label>Gender:</label>
                 <select value={gender} onChange={(e) => setGender(e.target.value)}>
@@ -138,30 +142,17 @@ const WeightManagementPage = () => {
 
             <div className="current-weight-dropdown">
                 <label>Current Weight(lbs):</label>
-                <input
-                    type="number"
-                    value={currentWeight}
-                    onChange={(e) => setCurrentWeight((e.target.value))}
-                    placeholder="Enter your current weight"
-                />
+                <input type="number" value={currentWeight} onChange={e => setCurrentWeight(e.target.value)} placeholder="Enter your current weight" />
             </div>
 
             <div className="target-weight-dropdown">
                 <label>Target Weight Class: </label>
-                <select
-                    value={targetWeightClass}
-                    onChange={(e) => setTargetWeightClass(e.target.value)}
-                    disabled={!gender}
-                >
-
+                <select value={targetWeightClass} onChange={e => setTargetWeightClass(e.target.value)} disabled={!gender}>
                     <option value="">Select Class</option>
-                    {weightClasses.map((x) => (
-                        <option key={x.name} value={x.name}>
-                            {x.name} {x.max !== Infinity ? `(<= ${x.max} lbs)` : '(> 198 lbs)'}
-                        </option>
-                    ))}
+                    {weightClasses.map(x => <option key={x.name} value={x.name}>{x.name} {x.max !== Infinity ? `(<= ${x.max} lbs)` : '(> 198 lbs)'}</option>)}
                 </select>
             </div>
+
             <div className="get-status">
                 <br />
                 {getStatus()}
@@ -170,81 +161,41 @@ const WeightManagementPage = () => {
             <form onSubmit={saveWeighIn} className="weight-recording-form">
                 <div className="weighin-field">
                     <label htmlFor="date">Date:</label>
-                    <input
-                        type='date'
-                        id="date"
-                        value={date}
-                        onChange={(e) => setDate(e.target.value)}
-                        placeholder="Enter the date"
-                    />
+                    <input type='date' id="date" value={date} onChange={e => setDate(e.target.value)} placeholder="Enter the date" />
                 </div>
                 <div className="weighin-field">
                     <label htmlFor="notes">Notes:</label>
-                    <input
-                        id="notes"
-                        value={notes}
-                        onChange={(e) => setNotes(e.target.value)}
-                        placeholder="Type your notes here..."
-                    />
+                    <input id="notes" value={notes} onChange={e => setNotes(e.target.value)} placeholder="Type your notes here..." />
                 </div>
-                <Button
-                    type="submit"
-                    label="Save Weight"
-                    disabled={!currentWeight || Number(currentWeight) <= 0}
-                    className={"save-weight-button"}
-                />
+                <Button type="submit" label="Save Weight" disabled={!currentWeight || Number(currentWeight) <= 0} className={"save-weight-button"} />
                 {success && <div className="success-message">{success}</div>}
                 {error && <div className="error-message">{error}</div>}
             </form>
-            <div>
-                {sortedHistory.length > 0 && selectedClass && (
-                    <div className="recharts-container">
-                        <h3>Weight History & Progress</h3>
 
-                        <ResponsiveContainer width="100%" height={350}>
-                            <LineChart data={sortedHistory}>
-                                <CartesianGrid strokeDasharray="3 3" />
+            {role === 'admin' && (
+                <div className="admin-panel">
+                    <h3>Admin Panel</h3>
+                    <p>Only visible to admin.</p>
+                </div>
+            )}
 
-                                <XAxis
-                                    dataKey="date"
-                                    tickFormatter={(date) =>
-                                        new Date(date).toLocaleDateString()
-                                    }
-                                />
-
-                                <YAxis />
-
-                                <Tooltip
-                                    labelFormatter={(date) =>
-                                        new Date(date).toLocaleDateString()
-                                    }
-                                />
-
-                                {selectedClass.max !== Infinity && (
-                                    <ReferenceLine
-                                        y={selectedClass.max}
-                                        stroke="green"
-                                        strokeDasharray="5 5"
-                                        label="Target"
-                                    />
-                                )}
-
-                                <Line
-                                    type="monotone"
-                                    dataKey="weight"
-                                    stroke="#e63946"
-                                    strokeWidth={3}
-                                    dot={{ r: 4 }}
-                                    activeDot={{ r: 8 }}
-                                />
-                            </LineChart>
-                        </ResponsiveContainer>
-                    </div>
-                )}
-            </div>
+            {sortedHistory.length > 0 && selectedClass && (
+                <div className="recharts-container">
+                    <h3>Weight History & Progress</h3>
+                    <ResponsiveContainer width="100%" height={350}>
+                        <LineChart data={sortedHistory}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="date" tickFormatter={date => new Date(date).toLocaleDateString()} />
+                            <YAxis />
+                            <Tooltip labelFormatter={date => new Date(date).toLocaleDateString()} />
+                            {selectedClass.max !== Infinity && <ReferenceLine y={selectedClass.max} stroke="green" strokeDasharray="5 5" label="Target" />}
+                            <Line type="monotone" dataKey="weight" stroke="#e63946" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 8 }} />
+                        </LineChart>
+                    </ResponsiveContainer>
+                </div>
+            )}
         </div>
-
-    )
-}
+    );
+};
 
 export default WeightManagementPage;
