@@ -21,11 +21,18 @@ public class User {
     @Column(name = "created_at")
     private OffsetDateTime createdAt = OffsetDateTime.now();
 
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
     // Default constructor for DB
     public User() {
     }
 
     ;
+
+    public enum Gender {
+        Men, Women
+    }
 
     public User(String username, String email) {
         this.username = username;

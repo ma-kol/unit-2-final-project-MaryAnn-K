@@ -8,7 +8,6 @@ import org.launchcode.boxing_mindset_backend.repositories.WeighInRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -35,7 +34,7 @@ public class WeighInController {
     }
 
     @PostMapping("/add")
-    public String addWeighIn(@RequestBody WeighInDTO body) {
+    public WeighIn addWeighIn(@RequestBody WeighInDTO body) {
         {
             User user = userRepository.findById(body.userId).orElse(null);
             if (user == null) {
@@ -47,7 +46,7 @@ public class WeighInController {
             newWeighIn.setWeight(body.weight);
             newWeighIn.setNotes(body.notes);
             weighInRepository.save(newWeighIn);
-            return "New weight of " + newWeighIn + " added and recorded successfully.";
+            return weighInRepository.save(newWeighIn);
         }
     }
 }
