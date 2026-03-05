@@ -28,6 +28,10 @@ public class User {
     public User() {
     }
 
+    public <E extends Enum<E>> Enum<E> getGender() {
+        return null;
+    }
+
     ;
 
     public enum Gender {

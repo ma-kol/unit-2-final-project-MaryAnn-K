@@ -6,6 +6,7 @@ import org.launchcode.boxing_mindset_backend.models.WeighIn;
 import org.launchcode.boxing_mindset_backend.repositories.UserRepository;
 import org.launchcode.boxing_mindset_backend.repositories.WeighInRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,8 +46,21 @@ public class WeighInController {
             newWeighIn.setDate(body.date);
             newWeighIn.setWeight(body.weight);
             newWeighIn.setNotes(body.notes);
-            weighInRepository.save(newWeighIn);
             return weighInRepository.save(newWeighIn);
         }
+    }
+
+    @PutMapping("/{userId}")
+    public ResponseEntity<WeighIn> updateWeighIn(@PathVariable int id, @RequestBody WeighIn updatedWeighIn) {
+        return weighInRepository.findById(id)
+                .map(weighIn -> {
+                    weighIn.setWeight(updatedWeighIn.getWeight());
+                    weighIn.setDate(updatedWeighIn.getDate());
+                    weighIn.setNotes(updatedWeighIn.getNotes());
+
+                    WeighIn saved = weighInRepository.save(weighIn);
+                    return ResponseEntity.ok(saved);
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 }
