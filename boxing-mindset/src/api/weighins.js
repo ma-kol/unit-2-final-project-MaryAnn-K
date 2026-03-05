@@ -25,3 +25,19 @@ export async function createWeighIn({ userId, weight, notes, date }) {
   }
   return response.json();
 }
+
+export async function updateWeighIn(id, data) {
+  const response = await fetch(`http://localhost:8080/api/weigh-ins/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update weigh-in");
+  }
+
+  return response.json();
+}

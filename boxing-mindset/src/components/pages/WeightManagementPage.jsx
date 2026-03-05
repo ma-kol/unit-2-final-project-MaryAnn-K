@@ -175,7 +175,7 @@ const WeightManagementPage = () => {
             {role === 'admin' && (
                 <div className="admin-panel">
                     <h3>Admin Panel</h3>
-                    <p>Only visible to admin.</p>
+                    <p>This is the admin view for demonstration purposes. Plan to expand in next phase.</p>
                 </div>
             )}
 
