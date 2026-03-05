@@ -41,3 +41,13 @@ export async function updateWeighIn(id, data) {
 
   return response.json();
 }
+
+export async function deleteWeighIn(id) {
+  const response = await fetch(`http://localhost:8080/api/weigh-ins/${id}`, {
+    method: "DELETE"
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete weigh-in");
+  }
+}
