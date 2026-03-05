@@ -63,4 +63,16 @@ public class WeighInController {
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteWeighIn(@PathVariable int id) {
+
+        if (!weighInRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        weighInRepository.deleteById(id);
+
+        return ResponseEntity.ok("Weigh-in deleted successfully");
+    }
 }
