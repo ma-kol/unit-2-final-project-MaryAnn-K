@@ -45,7 +45,7 @@ const ContactUsPage = () => {
 
     return (
         <div className="contact-container">
-            <h2 className="contact-header">Contact Us</h2>
+            <h2 className="contact-header">Contact</h2>
             <form onSubmit={handleSubmit} className="contact-form">
                 <FormField
                     label="name"

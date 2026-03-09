@@ -17,7 +17,7 @@ const NavMenu = ({ setCurrentPage }) => {
                 <li><Link to="/intervaltimer">Timer</Link></li>
                 <li><Link to="/weightmanagement">Weight</Link></li>
                 <li><Link to="/classattendance">Attendance</Link></li>
-                <li><Link to="contactus">Contact Us</Link></li>
+                <li><Link to="contactus">Contact</Link></li>
             </ul>
         </nav>
     )
