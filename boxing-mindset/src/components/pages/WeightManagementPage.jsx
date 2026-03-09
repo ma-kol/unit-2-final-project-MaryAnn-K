@@ -1,6 +1,6 @@
 import '../styling/weight.css'
 import { useState, useEffect } from 'react';
-import { getWeighInsForUser, getLatestWeighIn, createWeighIn } from '../../api/weighins';
+import { getWeighInsForUser, getLatestWeighIn, createWeighIn, updateWeighIn, deleteWeighIn } from '../../api/weighins';
 import Button from '../layout/Button';
 import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ReferenceLine, ResponsiveContainer } from "recharts";
 
@@ -116,6 +116,36 @@ const WeightManagementPage = () => {
         }
     }
 
+    async function handleDelete(id) {
+        try {
+            await deleteWeighIn(id);
+
+            setHistory(prev => prev.filter(weight => weight.id !== id));
+
+            setSuccess("Weight deleted successfully!");
+        } catch (e) {
+            setError(e.message);
+        }
+    }
+
+    async function handleUpdate(id) {
+        try {
+            const updated = await updateWeighIn(id, {
+                weight: Number(currentWeight),
+                date: date,
+                notes: notes
+            });
+
+            setHistory(prev =>
+                prev.map(weight => (weight.id === id ? updated : weight))
+            );
+
+            setSuccess("Weight updated!");
+        } catch (e) {
+            setError(e.message);
+        }
+    }
+
     return (
         <div className="weight-container">
             <h2 className="weight-header">Weight Management</h2>
@@ -194,6 +224,23 @@ const WeightManagementPage = () => {
                     </ResponsiveContainer>
                 </div>
             )}
+
+            <h3 className='weight-recording-form'>Edit Weights</h3>
+            {
+                history.map(weight => (
+                    <div className='weight-recording-form' key={weight.id}>
+                        {new Date(weight.date).toLocaleDateString()} - {weight.weight} lbs
+
+                        <button onClick={() => handleUpdate(weight.id)}>
+                            Update
+                        </button>
+
+                        <button onClick={() => handleDelete(weight.id)}>
+                            Delete
+                        </button>
+                    </div>
+                ))
+            }
         </div>
     );
 };

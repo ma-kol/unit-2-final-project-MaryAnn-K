@@ -17,7 +17,7 @@ const Hero = () => {
                 </video>
                 <div className="hero-overlay">
                     <h2>Where Champions Are Made</h2>
-                    <p className="hero-message">consistent | dedicated | passion</p>
+                    <p className="hero-message">consistency | dedication | passion</p>
                     <Link to="/contactus">
                         <Button
                             label='Learn More'
