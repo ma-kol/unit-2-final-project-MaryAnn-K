@@ -4,48 +4,90 @@ import { getWeighInsForUser, getLatestWeighIn, createWeighIn, updateWeighIn, del
 import Button from '../layout/Button';
 import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ReferenceLine, ResponsiveContainer } from "recharts";
 
-// Hardcoded for testing, change later
-const USER_ID = 1;
+const mensWeightClasses = [
+    { name: 'Bantamweight', max: 121 },
+    { name: 'Lightweight', max: 132 },
+    { name: 'Welterweight', max: 143 },
+    { name: 'Light Middleweight', max: 154 },
+    { name: 'Light Heavyweight', max: 176 },
+    { name: 'Heavyweight', max: 198 },
+    { name: 'Super Heavyweight', max: Infinity }
+];
+
+const womensWeightClasses = [
+    { name: 'Flyweight', max: 112 },
+    { name: 'Bantamweight', max: 119 },
+    { name: 'Featherweight', max: 125 },
+    { name: 'Lightweight', max: 132 },
+    { name: 'Welterweight', max: 143 },
+    { name: 'Light Middleweight', max: 154 },
+    { name: 'Middleweight', max: 165 }
+];
 
 const WeightManagementPage = () => {
+    // Form inputs
     const [currentWeight, setCurrentWeight] = useState('');
     const [gender, setGender] = useState('');
     const [targetWeightClass, setTargetWeightClass] = useState('');
-    const [history, setHistory] = useState([]);
-    const [latest, setLatest] = useState(null);
-    const [notes, setNotes] = useState('');
     const [date, setDate] = useState('');
+    const [notes, setNotes] = useState('');
+
+    // App data
+    const [history, setHistory] = useState([]);
+    const [allUsersHistory, setAllUsersHistory] = useState([]);
+    const [users, setUsers] = useState([]);
+    const [latest, setLatest] = useState(null);
+
+    // UI
+    const [editingId, setEditingId] = useState(null);
+    const [selectedUserId, setSelectedUserId] = useState(null);
+    const [role, setRole] = useState('user');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
-    const [role, setRole] = useState('user');
-    const [allUsersHistory, setAllUsersHistory] = useState([]);
 
-    // Loads from backend
+    // Default user for normal users
+    const defaultUserId = 1;
+
+    // Decide which userId to use
+    const userId = role === 'admin' ? selectedUserId : defaultUserId;
+
     useEffect(() => {
-        if (!USER_ID) return;
-
-        (async () => {
+        const fetchWeights = async () => {
             try {
                 if (role === 'admin') {
-                    // Admin sees everyone’s weights
-                    const response = await fetch('http://localhost:8080/api/weigh-ins');
-                    const data = await response.json();
-                    setAllUsersHistory(data);
-                } else {
-                    const [history, latest] = await Promise.all([
-                        getWeighInsForUser(USER_ID),
-                        getLatestWeighIn(USER_ID)
+                    // Admin fetches all users and all weights
+                    const [weightsRes, usersRes] = await Promise.all([
+                        fetch('http://localhost:8080/api/weigh-ins'),
+                        fetch('http://localhost:8080/api/users')
                     ]);
-                    setHistory(history || []);
-                    setLatest(latest || null);
+
+                    const weightsData = weightsRes.status === 204 ? [] : await weightsRes.json();
+                    const usersData = usersRes.status === 204 ? [] : await usersRes.json();
+
+                    setAllUsersHistory(weightsData);
+                    setUsers(usersData);
+
+                    // Default selected user in dropdown if not yet set
+                    if (!selectedUserId && usersData.length > 0) {
+                        setSelectedUserId(usersData[0].id);
+                    }
+                } else {
+                    // Normal user fetches only their own weights
+                    const [userHistory, latestEntry] = await Promise.all([
+                        getWeighInsForUser(defaultUserId),
+                        getLatestWeighIn(defaultUserId)
+                    ]);
+                    setHistory(userHistory || []);
+                    setLatest(latestEntry || null);
                 }
             } catch (e) {
                 setError(e.message);
             }
-        })();
+        }
+
+        fetchWeights();
     }, [role]);
 
-    // Hides success message after 5 seconds
     useEffect(() => {
         if (success) {
             const timer = setTimeout(() => setSuccess(''), 5000);
@@ -53,30 +95,16 @@ const WeightManagementPage = () => {
         }
     }, [success]);
 
-    const mensWeightClasses = [
-        { name: 'Bantamweight', max: 121 },
-        { name: 'Lightweight', max: 132 },
-        { name: 'Welterweight', max: 143 },
-        { name: 'Light Middleweight', max: 154 },
-        { name: 'Light Heavyweight', max: 176 },
-        { name: 'Heavyweight', max: 198 },
-        { name: 'Super Heavyweight', max: Infinity }
-    ];
-
-    const womensWeightClasses = [
-        { name: 'Flyweight', max: 112 },
-        { name: 'Bantamweight', max: 119 },
-        { name: 'Featherweight', max: 125 },
-        { name: 'Lightweight', max: 132 },
-        { name: 'Welterweight', max: 143 },
-        { name: 'Light Middleweight', max: 154 },
-        { name: 'Middleweight', max: 165 }
-    ];
-
     const weightClasses = gender === 'Men' ? mensWeightClasses : gender === 'Women' ? womensWeightClasses : [];
     const selectedClass = weightClasses.find(x => x.name === targetWeightClass);
-    // Sort weights for Recharts
-    const displayHistory = role === 'admin' ? allUsersHistory : history;
+
+    const displayHistory = (() => {
+        const list = role === 'admin'
+            ? allUsersHistory.filter(entry => entry.user.id === selectedUserId)
+            : history;
+        return list.map(entry => ({ ...entry, userId: entry.user?.id || entry.userId }));
+    })();
+
     const sortedHistory = [...displayHistory].sort((a, b) => new Date(a.date) - new Date(b.date));
 
     const getStatus = () => {
@@ -97,12 +125,14 @@ const WeightManagementPage = () => {
         setError('');
         setSuccess('');
 
+        if (!userId) return setError('Please select a user.');
+
         const lbs = Number(currentWeight);
         if (!lbs || lbs <= 0) return setError('Please enter a valid weight (lbs.).');
 
         try {
             const saved = await createWeighIn({
-                userId: USER_ID,
+                userId,
                 date: date || undefined,
                 notes: notes || undefined,
                 weight: lbs
@@ -121,6 +151,7 @@ const WeightManagementPage = () => {
             await deleteWeighIn(id);
 
             setHistory(prev => prev.filter(weight => weight.id !== id));
+            setAllUsersHistory(prev => prev.filter(weight => weight.id !== id));
 
             setSuccess("Weight deleted successfully!");
         } catch (e) {
@@ -128,27 +159,40 @@ const WeightManagementPage = () => {
         }
     }
 
-    async function handleUpdate(id) {
-        try {
-            const updated = await updateWeighIn(id, {
-                weight: Number(currentWeight),
-                date: date,
-                notes: notes
-            });
+    const EditRow = ({ weightEntry, onSave, onCancel }) => {
+        const [weight, setWeight] = useState(weightEntry.weight);
+        const [date, setDate] = useState(weightEntry.date);
+        const [notes, setNotes] = useState(weightEntry.notes || '');
 
-            setHistory(prev =>
-                prev.map(weight => (weight.id === id ? updated : weight))
-            );
+        return (
+            <>
+                <input type="number" value={weight} onChange={e => setWeight(e.target.value)} />
+                <input type="date" value={date} onChange={e => setDate(e.target.value)} />
+                <input type="text" value={notes} onChange={e => setNotes(e.target.value)} />
+                <button onClick={() => onSave({ weight: Number(weight), date, notes })}>Save</button>
+                <button onClick={onCancel}>Cancel</button>
+            </>
+        );
+    };
 
-            setSuccess("Weight updated!");
-        } catch (e) {
-            setError(e.message);
-        }
+async function handleUpdate(id, updatedValues) {
+    try {
+        const updated = await updateWeighIn(id, updatedValues);
+
+        setHistory(prev => prev.map(weight => (weight.id === id ? updated : weight)));
+
+        setAllUsersHistory(prev => prev.map(weight => (weight.id === id ? updated : weight)));
+
+        setSuccess("Weight updated!");
+    } catch (e) {
+        setError(e.message);
     }
+}
 
     return (
         <div className="weight-container">
             <h2 className="weight-header">Weight Management</h2>
+
             <div className="role-toggle">
                 <label className="switch">
                     <input
@@ -177,7 +221,7 @@ const WeightManagementPage = () => {
 
             <div className="target-weight-dropdown">
                 <label>Target Weight Class: </label>
-                <select value={targetWeightClass} onChange={e => setTargetWeightClass(e.target.value)} disabled={!gender}>
+                <select value={targetWeightClass} onChange={(e) => setTargetWeightClass(e.target.value)} disabled={!gender}>
                     <option value="">Select Class</option>
                     {weightClasses.map(x => <option key={x.name} value={x.name}>{x.name} {x.max !== Infinity ? `(<= ${x.max} lbs)` : '(> 198 lbs)'}</option>)}
                 </select>
@@ -202,10 +246,21 @@ const WeightManagementPage = () => {
                 {error && <div className="error-message">{error}</div>}
             </form>
 
-            {role === 'admin' && (
-                <div className="admin-panel">
-                    <h3>Admin Panel</h3>
-                    <p>This is the admin view for demonstration purposes. Plan to expand in next phase.</p>
+            {/* Admin user selector */}
+            {role === 'admin' && users.length > 0 && (
+                <div className="admin-user-selector">
+                    <label>Select User: </label>
+                    <select
+                        value={selectedUserId || ''}
+                        onChange={(e) => setSelectedUserId(Number(e.target.value))}
+                    >
+                        <option value="" disabled>Select a user</option>
+                        {users.map(user => (
+                            <option key={user.id} value={user.id}>
+                                {user.username || `User ${user.id}`}
+                            </option>
+                        ))}
+                    </select>
                 </div>
             )}
 
@@ -218,29 +273,54 @@ const WeightManagementPage = () => {
                             <XAxis dataKey="date" tickFormatter={date => new Date(date).toLocaleDateString()} />
                             <YAxis />
                             <Tooltip labelFormatter={date => new Date(date).toLocaleDateString()} />
-                            {selectedClass.max !== Infinity && <ReferenceLine y={selectedClass.max} stroke="green" strokeDasharray="5 5" label="Target" />}
+                            {selectedClass.max !== Infinity && (
+                                <ReferenceLine y={selectedClass.max} stroke="green" strokeDasharray="5 5" label="Target" />
+                            )}
                             <Line type="monotone" dataKey="weight" stroke="#e63946" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 8 }} />
                         </LineChart>
                     </ResponsiveContainer>
                 </div>
             )}
 
-            <h3 className='weight-recording-form'>Edit Weights</h3>
-            {
-                history.map(weight => (
-                    <div className='weight-recording-form' key={weight.id}>
-                        {new Date(weight.date).toLocaleDateString()} - {weight.weight} lbs
-
-                        <button onClick={() => handleUpdate(weight.id)}>
-                            Update
-                        </button>
-
-                        <button onClick={() => handleDelete(weight.id)}>
-                            Delete
-                        </button>
-                    </div>
-                ))
-            }
+            <div className="weight-history">
+                {sortedHistory.length > 0 && (
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Weight</th>
+                                <th>Notes</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {sortedHistory.map(weight => (
+                                <tr key={weight.id}>
+                                    {editingId === weight.id ? (
+                                        <td colSpan={4}>
+                                            <EditRow
+                                                weightEntry={weight}
+                                                onSave={(updatedValues) => { handleUpdate(weight.id, updatedValues); setEditingId(null); }}
+                                                onCancel={() => setEditingId(null)}
+                                            />
+                                        </td>
+                                    ) : (
+                                        <>
+                                            <td>{new Date(weight.date).toLocaleDateString()}</td>
+                                            <td>{weight.weight} lbs</td>
+                                            <td>{weight.notes || '-'}</td>
+                                            <td>
+                                                <button className='update-button' onClick={() => setEditingId(weight.id)}>Edit</button>
+                                                <button className='delete-button' onClick={() => handleDelete(weight.id)}>Delete</button>
+                                            </td>
+                                        </>
+                                    )}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                )}
+            </div>
         </div>
     );
 };

@@ -27,7 +27,7 @@ export async function createWeighIn({ userId, weight, notes, date }) {
 }
 
 export async function updateWeighIn(id, data) {
-  const response = await fetch(`http://localhost:8080/api/weigh-ins/${id}`, {
+  const response = await fetch(`${BASE_URL}/api/weigh-ins/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json"
@@ -43,7 +43,7 @@ export async function updateWeighIn(id, data) {
 }
 
 export async function deleteWeighIn(id) {
-  const response = await fetch(`http://localhost:8080/api/weigh-ins/${id}`, {
+  const response = await fetch(`${BASE_URL}/api/weigh-ins/${id}`, {
     method: "DELETE"
   });
 
