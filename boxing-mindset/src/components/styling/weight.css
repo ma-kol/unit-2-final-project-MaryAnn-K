@@ -1,68 +1,69 @@
 .weight-header {
-    color: white;
-    position: relative;
-    font-size: 50px;
+  color: white;
+  position: relative;
+  font-size: 50px;
 }
 
 .weight-container {
-    text-align: center;
-    padding: 50px;
-    font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  padding: 50px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .weight-container input,
 .weight-container select {
-    max-width: 600px;
-    width: 100%;
-    border-radius: 8px;
-    padding: 10px;
-    margin: 10px auto;
-    display: block;
-    font-size: 16px;
-    box-sizing: border-box;
+  max-width: 600px;
+  width: 100%;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 10px auto;
+  display: block;
+  font-size: 16px;
+  box-sizing: border-box;
 }
 
 .gender-dropdown {
-    position: relative;
+  position: relative;
 }
 
 .current-weight-dropdown {
-    position: relative;
+  position: relative;
 }
 
 .target-weight-dropdown {
-    position: relative;
+  position: relative;
 }
 
 .get-status {
-    position: relative;
-    color: white;
-    font-size: 20px;
+  position: relative;
+  color: white;
+  font-size: 20px;
 }
 
 .weight-recording-form {
-    position: relative;
-    color: white;
-    font-size: 20px;
-    margin-top: 20px;
+  position: relative;
+  color: white;
+  font-size: 20px;
+  margin-top: 20px;
 }
 
 .recharts-container {
-    margin-top: 40px;
-    padding: 20px;
-    background: #f8f9fa;
-    border-radius: 12px;
+  position: relative;
+  margin-top: 40px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
 }
 
 .save-weight-button {
-    width: 150px;
-    height: 40px;
-    font-size: 16px;
-    border-radius: 8px;
+  width: 150px;
+  height: 40px;
+  font-size: 16px;
+  border-radius: 8px;
 }
 
 .role-toggle {
-    color: white;
+  color: white;
 }
 
 /* Slide toggle switch */
@@ -104,11 +105,11 @@
   transition: .4s;
 }
 
-input:checked + .slider {
+input:checked+.slider {
   background-color: #4caf50;
 }
 
-input:checked + .slider:before {
+input:checked+.slider:before {
   transform: translateX(26px);
 }
 
@@ -126,5 +127,76 @@ input:checked + .slider:before {
 }
 
 .admin-panel {
-    color: white;
+  position: relative;
+  color: white;
+}
+
+.update-button {
+  position: relative;
+  background-color: green;
+  color: black;
+  padding: 3px;
+  margin: 10px;
+  width: 60px;
+  height: 40px;
+  font-size: 14px;
+  border-radius: 8px;
+}
+
+.update-button:hover {
+  background-color: #2d7a2d;
+  color: white;
+}
+
+.delete-button {
+  position: relative;
+  background-color: red;
+  color: black;
+  padding: 3px;
+  margin: 10px;
+  width: 60px;
+  height: 40px;
+  font-size: 14px;
+  border-radius: 8px;
+}
+
+.delete-button:hover {
+  background-color: #c62828;
+  color: white;
+}
+
+.weight-history {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  margin: 30px 0;
+}
+
+.weight-history table th {
+  background-color: #1a1a1a;
+  color: #f5f5f5;
+  padding: 10px 15px;
+  border-bottom: 2px solid #e63946;
+  text-align: center;
+}
+
+.weight-history table td {
+  background-color: #111;
+  color: #f0f0f0;
+  padding: 10px 15px;
+  border-bottom: 1px solid #333;
+  text-align: center;
+}
+
+
+.admin-user-selector select {
+  position: relative;
+  color: black;
+  background-color: #f0f0f0;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 16px;
 }
