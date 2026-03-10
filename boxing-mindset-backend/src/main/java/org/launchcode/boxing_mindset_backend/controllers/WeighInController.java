@@ -50,7 +50,7 @@ public class WeighInController {
         }
     }
 
-    @PutMapping("/{userId}")
+    @PutMapping("/{id}")
     public ResponseEntity<WeighIn> updateWeighIn(@PathVariable int id, @RequestBody WeighIn updatedWeighIn) {
         return weighInRepository.findById(id)
                 .map(weighIn -> {
