@@ -270,7 +270,7 @@ async function handleUpdate(id, updatedValues) {
                     <ResponsiveContainer width="100%" height={350}>
                         <LineChart data={sortedHistory}>
                             <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="date" tickFormatter={date => new Date(date).toLocaleDateString()} />
+                            <XAxis dataKey="date" />
                             <YAxis />
                             <Tooltip labelFormatter={date => new Date(date).toLocaleDateString()} />
                             {selectedClass.max !== Infinity && (
@@ -306,7 +306,7 @@ async function handleUpdate(id, updatedValues) {
                                         </td>
                                     ) : (
                                         <>
-                                            <td>{new Date(weight.date).toLocaleDateString()}</td>
+                                            <td>{weight.date}</td>
                                             <td>{weight.weight} lbs</td>
                                             <td>{weight.notes || '-'}</td>
                                             <td>
