@@ -6,9 +6,9 @@ import org.launchcode.boxing_mindset_backend.models.WeighIn;
 import org.launchcode.boxing_mindset_backend.repositories.UserRepository;
 import org.launchcode.boxing_mindset_backend.repositories.WeighInRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -35,7 +35,7 @@ public class WeighInController {
     }
 
     @PostMapping("/add")
-    public String addWeighIn(@RequestBody WeighInDTO body) {
+    public WeighIn addWeighIn(@RequestBody WeighInDTO body) {
         {
             User user = userRepository.findById(body.userId).orElse(null);
             if (user == null) {
@@ -46,8 +46,33 @@ public class WeighInController {
             newWeighIn.setDate(body.date);
             newWeighIn.setWeight(body.weight);
             newWeighIn.setNotes(body.notes);
-            weighInRepository.save(newWeighIn);
-            return "New weight of " + newWeighIn + " added and recorded successfully.";
+            return weighInRepository.save(newWeighIn);
         }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<WeighIn> updateWeighIn(@PathVariable int id, @RequestBody WeighIn updatedWeighIn) {
+        return weighInRepository.findById(id)
+                .map(weighIn -> {
+                    weighIn.setWeight(updatedWeighIn.getWeight());
+                    weighIn.setDate(updatedWeighIn.getDate());
+                    weighIn.setNotes(updatedWeighIn.getNotes());
+
+                    WeighIn saved = weighInRepository.save(weighIn);
+                    return ResponseEntity.ok(saved);
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteWeighIn(@PathVariable int id) {
+
+        if (!weighInRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        weighInRepository.deleteById(id);
+
+        return ResponseEntity.ok("Weigh-in deleted successfully");
     }
 }
