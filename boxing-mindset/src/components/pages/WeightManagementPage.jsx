@@ -88,6 +88,27 @@ const WeightManagementPage = () => {
     }, [role, selectedUserId]);
 
     useEffect(() => {
+        if (role === 'admin') return;
+
+        if (!currentUserId) return;
+
+        const fetchUserWeights = async () => {
+            try {
+                const data = await getWeighInsForUser(currentUserId);
+                setHistory(data);
+
+                if (data.length > 0) {
+                    setLatest(data[0]);
+                }
+            } catch (e) {
+                setError(e.message);
+            }
+        };
+
+        fetchUserWeights();
+    }, [currentUserId, role]);
+
+    useEffect(() => {
         if (success) {
             const timer = setTimeout(() => setSuccess(''), 5000);
             return () => clearTimeout(timer);
@@ -137,6 +158,7 @@ const WeightManagementPage = () => {
                 weight: lbs
             });
             setHistory(prev => [saved, ...prev]);
+            setAllUsersHistory(prev => [saved, ...prev]);
             if (!latest || new Date(saved.date) >= new Date(latest.date)) setLatest(saved);
             setSuccess("Weight has been successfully recorded! 🥊");
             setDate(''); setNotes(''); setCurrentWeight('');
@@ -296,7 +318,7 @@ const WeightManagementPage = () => {
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="date" />
                             <YAxis />
-                            <Tooltip labelFormatter={date => new Date(date).toLocaleDateString()} />
+                            <Tooltip labelFormatter={(date) => date} />
                             {selectedClass.max !== Infinity && (
                                 <ReferenceLine y={selectedClass.max} stroke="green" strokeDasharray="5 5" label="Target" />
                             )}
