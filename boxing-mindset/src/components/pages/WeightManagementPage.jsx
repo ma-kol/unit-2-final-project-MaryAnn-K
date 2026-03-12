@@ -37,6 +37,7 @@ const WeightManagementPage = () => {
     const [allUsersHistory, setAllUsersHistory] = useState([]);
     const [users, setUsers] = useState([]);
     const [latest, setLatest] = useState(null);
+    const [currentUserId, setCurrentUserId] = useState("");
 
     // UI
     const [editingId, setEditingId] = useState(null);
@@ -45,48 +46,46 @@ const WeightManagementPage = () => {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
-    // Default user for normal users
-    const defaultUserId = 1;
-
     // Decide which userId to use
-    const userId = role === 'admin' ? selectedUserId : defaultUserId;
+    const userId = role === 'admin' ? selectedUserId : currentUserId;
 
     useEffect(() => {
-        const fetchWeights = async () => {
+        if (role !== 'admin') return;
+
+        const fetchUsers = async () => {
             try {
-                if (role === 'admin') {
-                    // Admin fetches all users and all weights
-                    const [weightsRes, usersRes] = await Promise.all([
-                        fetch('http://localhost:8080/api/weigh-ins'),
-                        fetch('http://localhost:8080/api/users')
-                    ]);
+                const res = await fetch('http://localhost:8080/api/users');
+                const data = await res.json();
 
-                    const weightsData = weightsRes.status === 204 ? [] : await weightsRes.json();
-                    const usersData = usersRes.status === 204 ? [] : await usersRes.json();
+                setUsers(data);
 
-                    setAllUsersHistory(weightsData);
-                    setUsers(usersData);
-
-                    // Default selected user in dropdown if not yet set
-                    if (!selectedUserId && usersData.length > 0) {
-                        setSelectedUserId(usersData[0].id);
-                    }
-                } else {
-                    // Normal user fetches only their own weights
-                    const [userHistory, latestEntry] = await Promise.all([
-                        getWeighInsForUser(defaultUserId),
-                        getLatestWeighIn(defaultUserId)
-                    ]);
-                    setHistory(userHistory || []);
-                    setLatest(latestEntry || null);
+                if (!selectedUserId && data.length > 0) {
+                    setSelectedUserId(data[0].id);
                 }
             } catch (e) {
                 setError(e.message);
             }
-        }
+        };
+
+        fetchUsers();
+    }, [role]);
+
+    useEffect(() => {
+        if (role !== 'admin') return;
+
+        const fetchWeights = async () => {
+            try {
+                const res = await fetch('http://localhost:8080/api/weigh-ins');
+                const data = await res.json();
+
+                setAllUsersHistory(data);
+            } catch (e) {
+                setError(e.message);
+            }
+        };
 
         fetchWeights();
-    }, [role]);
+    }, [role, selectedUserId]);
 
     useEffect(() => {
         if (success) {
@@ -175,19 +174,19 @@ const WeightManagementPage = () => {
         );
     };
 
-async function handleUpdate(id, updatedValues) {
-    try {
-        const updated = await updateWeighIn(id, updatedValues);
+    async function handleUpdate(id, updatedValues) {
+        try {
+            const updated = await updateWeighIn(id, updatedValues);
 
-        setHistory(prev => prev.map(weight => (weight.id === id ? updated : weight)));
+            setHistory(prev => prev.map(weight => (weight.id === id ? updated : weight)));
 
-        setAllUsersHistory(prev => prev.map(weight => (weight.id === id ? updated : weight)));
+            setAllUsersHistory(prev => prev.map(weight => (weight.id === id ? updated : weight)));
 
-        setSuccess("Weight updated!");
-    } catch (e) {
-        setError(e.message);
+            setSuccess("Weight updated!");
+        } catch (e) {
+            setError(e.message);
+        }
     }
-}
 
     return (
         <div className="weight-container">
@@ -204,6 +203,23 @@ async function handleUpdate(id, updatedValues) {
                 </label>
                 <span className="role-label">{role === 'admin' ? 'Admin' : 'User'}</span>
             </div>
+
+            {role !== 'admin' && (
+                <div className="demo-user-selector">
+                    <label>Demo User: </label>
+                    <select
+                        value={currentUserId}
+                        onChange={(e) => setCurrentUserId(Number(e.target.value))}
+                    >
+                        <option value="" disabled>
+                            -- Select a Demo User --
+                        </option>
+                        <option value={1}>Tupac</option>
+                        <option value={2}>Ali</option>
+                        <option value={3}>Carol</option>
+                    </select>
+                </div>
+            )}
 
             <div className="gender-dropdown">
                 <label>Gender:</label>
@@ -231,6 +247,14 @@ async function handleUpdate(id, updatedValues) {
                 <br />
                 {getStatus()}
             </div>
+
+            {
+                role === 'admin' && (
+                    <div>
+                        Saving weight for user: {selectedUserId}
+                    </div>
+                )
+            }
 
             <form onSubmit={saveWeighIn} className="weight-recording-form">
                 <div className="weighin-field">
