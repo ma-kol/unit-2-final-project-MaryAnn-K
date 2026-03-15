@@ -258,7 +258,7 @@ const WeightManagementPage = () => {
 
             <div className="dropdown-form">
                 <label>Current Weight(lbs):</label>
-                <input type="number" value={currentWeight} onChange={e => setCurrentWeight(e.target.value)} placeholder="Enter your current weight" />
+                <input type="number" value={currentWeight} onChange={e => setCurrentWeight(e.target.value)} placeholder="Enter your current weight (lbs.)" />
             </div>
 
             <div className="dropdown-form">
@@ -291,7 +291,7 @@ const WeightManagementPage = () => {
                     <label htmlFor="notes">Notes:</label>
                     <input id="notes" value={notes} onChange={e => setNotes(e.target.value)} placeholder="Type your notes here..." />
                 </div>
-                <Button type="submit" label="Save Weight" disabled={!currentWeight || Number(currentWeight) <= 0} className={"save-weight-button"} />
+                <Button type="submit" label="Save Weight" disabled={!currentWeight || Number(currentWeight) <= 0 || !date} className={"save-weight-button"} />
                 {success && <div className="success-message">{success}</div>}
                 {error && <div className="error-message">{error}</div>}
             </form>
