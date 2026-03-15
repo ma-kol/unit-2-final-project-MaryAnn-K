@@ -125,8 +125,12 @@ const WeightManagementPage = () => {
         return list.map(entry => ({ ...entry, userId: entry.user?.id || entry.userId }));
     })();
 
-    const sortedHistory = [...displayHistory].sort((a, b) => new Date(a.date) - new Date(b.date));
-
+    const sortedHistory = [...displayHistory]
+        .map(entry => ({
+            ...entry,
+            weight: Number(entry.weight)
+        }))
+        .sort((a, b) => new Date(a.date) - new Date(b.date));
     const getStatus = () => {
         if (!currentWeight || !selectedClass) return '';
         if (selectedClass.max === Infinity) {
@@ -317,8 +321,11 @@ const WeightManagementPage = () => {
                         <LineChart data={sortedHistory}>
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="date" />
-                            <YAxis />
-                            <Tooltip labelFormatter={(date) => date} />
+                            <YAxis domain={['auto', 'auto']} allowDecimals />
+                            <Tooltip
+                                formatter={(value) => `${value} lbs`}
+                                labelFormatter={(date) => `Date: ${date}`}
+                            />
                             {selectedClass.max !== Infinity && (
                                 <ReferenceLine y={selectedClass.max} stroke="green" strokeDasharray="5 5" label="Target" />
                             )}

@@ -42,9 +42,12 @@
 .recharts-container {
   position: relative;
   margin-top: 40px;
-  padding: 20px;
+  padding: 25px;
   background: #f8f9fa;
   border-radius: 12px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .save-weight-button {
@@ -164,6 +167,16 @@ input:checked+.slider:before {
   flex-direction: column;
   width: 100%;
   margin: 30px 0;
+}
+
+.weight-history table {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 800px;
+}
+
+.weight-history table tr:hover td {
+  background-color: #1f1f1f;
 }
 
 .weight-history table th {
