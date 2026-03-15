@@ -125,8 +125,12 @@ const WeightManagementPage = () => {
         return list.map(entry => ({ ...entry, userId: entry.user?.id || entry.userId }));
     })();
 
-    const sortedHistory = [...displayHistory].sort((a, b) => new Date(a.date) - new Date(b.date));
-
+    const sortedHistory = [...displayHistory]
+        .map(entry => ({
+            ...entry,
+            weight: Number(entry.weight)
+        }))
+        .sort((a, b) => new Date(a.date) - new Date(b.date));
     const getStatus = () => {
         if (!currentWeight || !selectedClass) return '';
         if (selectedClass.max === Infinity) {
@@ -242,8 +246,9 @@ const WeightManagementPage = () => {
                     </select>
                 </div>
             )}
+            <div className='form-card'>
 
-            <div className="dropdown-form">
+            <div className="weight-recording-form">
                 <label>Gender:</label>
                 <select value={gender} onChange={(e) => setGender(e.target.value)}>
                     <option value="">Select Gender</option>
@@ -252,12 +257,12 @@ const WeightManagementPage = () => {
                 </select>
             </div>
 
-            <div className="dropdown-form">
+            <div className="weight-recording-form">
                 <label>Current Weight(lbs):</label>
-                <input type="number" value={currentWeight} onChange={e => setCurrentWeight(e.target.value)} placeholder="Enter your current weight" />
+                <input type="number" value={currentWeight} onChange={e => setCurrentWeight(e.target.value)} placeholder="Enter your current weight (lbs.)" />
             </div>
 
-            <div className="dropdown-form">
+            <div className="weight-recording-form">
                 <label>Target Weight Class: </label>
                 <select value={targetWeightClass} onChange={(e) => setTargetWeightClass(e.target.value)} disabled={!gender}>
                     <option value="">Select Class</option>
@@ -279,15 +284,15 @@ const WeightManagementPage = () => {
             }
 
             <form onSubmit={saveWeighIn} className="weight-recording-form">
-                <div className="weighin-field">
+                <div>
                     <label htmlFor="date">Date:</label>
                     <input type='date' id="date" value={date} onChange={e => setDate(e.target.value)} placeholder="Enter the date" />
                 </div>
-                <div className="weighin-field">
+                <div>
                     <label htmlFor="notes">Notes:</label>
                     <input id="notes" value={notes} onChange={e => setNotes(e.target.value)} placeholder="Type your notes here..." />
                 </div>
-                <Button type="submit" label="Save Weight" disabled={!currentWeight || Number(currentWeight) <= 0} className={"save-weight-button"} />
+                <Button type="submit" label="Save Weight" disabled={!currentWeight || Number(currentWeight) <= 0 || !date} className={"save-weight-button"} />
                 {success && <div className="success-message">{success}</div>}
                 {error && <div className="error-message">{error}</div>}
             </form>
@@ -310,16 +315,23 @@ const WeightManagementPage = () => {
                 </div>
             )}
 
-            {sortedHistory.length > 0 && selectedClass && (
+            {sortedHistory.length > 0 && (
                 <div className="recharts-container">
                     <h3>Weight History & Progress</h3>
                     <ResponsiveContainer width="100%" height={350}>
-                        <LineChart data={sortedHistory}>
+                        <LineChart
+                            data={sortedHistory}
+                            margin={{ top: 20, right: 50, left: 20, bottom: 20 }}>
                             <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="date" />
-                            <YAxis />
-                            <Tooltip labelFormatter={(date) => date} />
-                            {selectedClass.max !== Infinity && (
+                            <XAxis
+                                dataKey="date" />
+                            <YAxis
+                                domain={['auto', 'auto']} allowDecimals />
+                            <Tooltip
+                                formatter={(value) => `${value} lbs`}
+                                labelFormatter={(date) => `Date: ${date}`}
+                            />
+                            {selectedClass && selectedClass.max !== Infinity && (
                                 <ReferenceLine y={selectedClass.max} stroke="green" strokeDasharray="5 5" label="Target" />
                             )}
                             <Line type="monotone" dataKey="weight" stroke="#e63946" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 8 }} />
@@ -366,6 +378,7 @@ const WeightManagementPage = () => {
                         </tbody>
                     </table>
                 )}
+            </div>
             </div>
         </div>
     );
