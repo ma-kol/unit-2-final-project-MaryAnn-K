@@ -22,10 +22,6 @@
   box-sizing: border-box;
 }
 
-.dropdown-form {
-  position: relative;
-}
-
 .get-status {
   position: relative;
   color: white;
@@ -34,8 +30,8 @@
 
 .weight-recording-form {
   position: relative;
-  color: white;
-  font-size: 20px;
+  color: black;
+  font-size: 18px;
   margin-top: 20px;
 }
 
@@ -207,4 +203,12 @@ input:checked+.slider:before {
 
 .demo-user-selector {
   position: relative;
+}
+
+.form-card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  max-width: 800px;
+  margin: 20px auto;
 }

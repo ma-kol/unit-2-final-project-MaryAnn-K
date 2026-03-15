@@ -246,8 +246,9 @@ const WeightManagementPage = () => {
                     </select>
                 </div>
             )}
+            <div className='form-card'>
 
-            <div className="dropdown-form">
+            <div className="weight-recording-form">
                 <label>Gender:</label>
                 <select value={gender} onChange={(e) => setGender(e.target.value)}>
                     <option value="">Select Gender</option>
@@ -256,12 +257,12 @@ const WeightManagementPage = () => {
                 </select>
             </div>
 
-            <div className="dropdown-form">
+            <div className="weight-recording-form">
                 <label>Current Weight(lbs):</label>
                 <input type="number" value={currentWeight} onChange={e => setCurrentWeight(e.target.value)} placeholder="Enter your current weight (lbs.)" />
             </div>
 
-            <div className="dropdown-form">
+            <div className="weight-recording-form">
                 <label>Target Weight Class: </label>
                 <select value={targetWeightClass} onChange={(e) => setTargetWeightClass(e.target.value)} disabled={!gender}>
                     <option value="">Select Class</option>
@@ -283,11 +284,11 @@ const WeightManagementPage = () => {
             }
 
             <form onSubmit={saveWeighIn} className="weight-recording-form">
-                <div className="weighin-field">
+                <div>
                     <label htmlFor="date">Date:</label>
                     <input type='date' id="date" value={date} onChange={e => setDate(e.target.value)} placeholder="Enter the date" />
                 </div>
-                <div className="weighin-field">
+                <div>
                     <label htmlFor="notes">Notes:</label>
                     <input id="notes" value={notes} onChange={e => setNotes(e.target.value)} placeholder="Type your notes here..." />
                 </div>
@@ -377,6 +378,7 @@ const WeightManagementPage = () => {
                         </tbody>
                     </table>
                 )}
+            </div>
             </div>
         </div>
     );
