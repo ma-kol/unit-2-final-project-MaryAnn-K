@@ -243,7 +243,7 @@ const WeightManagementPage = () => {
                 </div>
             )}
 
-            <div className="gender-dropdown">
+            <div className="dropdown-form">
                 <label>Gender:</label>
                 <select value={gender} onChange={(e) => setGender(e.target.value)}>
                     <option value="">Select Gender</option>
@@ -252,12 +252,12 @@ const WeightManagementPage = () => {
                 </select>
             </div>
 
-            <div className="current-weight-dropdown">
+            <div className="dropdown-form">
                 <label>Current Weight(lbs):</label>
                 <input type="number" value={currentWeight} onChange={e => setCurrentWeight(e.target.value)} placeholder="Enter your current weight" />
             </div>
 
-            <div className="target-weight-dropdown">
+            <div className="dropdown-form">
                 <label>Target Weight Class: </label>
                 <select value={targetWeightClass} onChange={(e) => setTargetWeightClass(e.target.value)} disabled={!gender}>
                     <option value="">Select Class</option>

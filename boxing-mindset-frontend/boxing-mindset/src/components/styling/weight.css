@@ -22,15 +22,7 @@
   box-sizing: border-box;
 }
 
-.gender-dropdown {
-  position: relative;
-}
-
-.current-weight-dropdown {
-  position: relative;
-}
-
-.target-weight-dropdown {
+.dropdown-form {
   position: relative;
 }
 
@@ -66,7 +58,6 @@
   color: white;
 }
 
-/* Slide toggle switch */
 .switch {
   position: relative;
   display: inline-block;
