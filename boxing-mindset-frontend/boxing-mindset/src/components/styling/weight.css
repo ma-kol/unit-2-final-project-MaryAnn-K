@@ -212,3 +212,8 @@ input:checked+.slider:before {
   max-width: 800px;
   margin: 20px auto;
 }
+
+.section {
+  margin: 40px auto;
+  max-width: 900px;
+}
