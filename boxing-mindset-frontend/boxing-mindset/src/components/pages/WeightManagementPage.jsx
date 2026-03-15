@@ -144,15 +144,21 @@ const WeightManagementPage = () => {
         return 'You are right on target! Get some rest and get ready to box!';
     };
 
+    // ---------------------
+    // CREATE
+    // ---------------------
+
     async function saveWeighIn(e) {
         e.preventDefault();
         setError('');
         setSuccess('');
 
-        if (!userId) return setError('Please select a user.');
-
+        if (!userId) return setError("Please select a user.");
+        if (!gender) return setError("Please select gender.");
         const lbs = Number(currentWeight);
-        if (!lbs || lbs <= 0) return setError('Please enter a valid weight (lbs.).');
+        if (!lbs || lbs <= 0) return setError("Please enter a valid weight (lbs.).");
+        if (!targetWeightClass) return setError("Please select a weight class.");
+        if (!date) return setError("Please select a date.");
 
         try {
             const saved = await createWeighIn({
@@ -171,7 +177,14 @@ const WeightManagementPage = () => {
         }
     }
 
+    // ---------------------
+    // DELETE
+    // ---------------------
+
     async function handleDelete(id) {
+
+        const confirmDelete = window.confirm("Are you sure you want to delete this weigh-in?");
+        if (!confirmDelete) return;
         try {
             await deleteWeighIn(id);
 
@@ -199,6 +212,10 @@ const WeightManagementPage = () => {
             </>
         );
     };
+
+    // ---------------------
+    // UPDATE
+    // ---------------------
 
     async function handleUpdate(id, updatedValues) {
         try {
@@ -259,7 +276,7 @@ const WeightManagementPage = () => {
                     </div>
 
                     <div className="weight-recording-form">
-                        <label>Current Weight(lbs):</label>
+                        <label>Current Weight (lbs):</label>
                         <input type="number" value={currentWeight} onChange={e => setCurrentWeight(e.target.value)} placeholder="Enter your current weight (lbs.)" />
                     </div>
 
