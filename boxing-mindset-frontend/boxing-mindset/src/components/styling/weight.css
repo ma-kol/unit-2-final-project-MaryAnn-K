@@ -220,12 +220,50 @@ input:checked+.slider:before {
   align-items: center;
 }
 
+.save-edit-button {
+  background-color: royalblue;
+  color: white;
+}
+
+.cancel-edit-button {
+  background-color: #b30000;
+  color: white;
+}
+
 .latest-weight {
   background: #b7e5a8;
   padding: 10px;
   border-radius: 6px;
   margin-bottom: 15px;
   font-weight: 500;
+}
+
+.role-banner {
+  padding: 12px 16px;
+  margin: 15px 0;
+  border-radius: 8px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.admin-banner {
+  position: relative;
+  background-color: gold;
+  color: black;
+  border: 1px solid gold;
+}
+
+.user-banner {
+  position: relative;
+  background-color: #b7e5a8;
+  color: black;
+  border: 1px solid #b7e5a8;
+}
+
+.admin-add-weight-button {
+  background-color: royalblue;
+  color: black;
+  font-weight: bolder;
 }
 
 @media (max-width: 768px) {
@@ -267,26 +305,4 @@ input:checked+.slider:before {
     font-size: 12px;
   }
 
-}
-
-.role-banner {
-  padding: 12px 16px;
-  margin: 15px 0;
-  border-radius: 8px;
-  font-weight: 600;
-  text-align: center;
-}
-
-.admin-banner {
-  position: relative;
-  background-color: gold;
-  color: black;
-  border: 1px solid gold;
-}
-
-.user-banner {
-  position: relative;
-  background-color: #b7e5a8;
-  color: black;
-  border: 1px solid #b7e5a8;
 }

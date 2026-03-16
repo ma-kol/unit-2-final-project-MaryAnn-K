@@ -45,6 +45,8 @@ const WeightManagementPage = () => {
     const [role, setRole] = useState('user');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [showAdminForm, setShowAdminForm] = useState(false);
+    const [chartTarget, setChartTarget] = useState(null);
 
     // Decide which userId to use
     const userId = role === 'admin' ? selectedUserId : currentUserId;
@@ -116,6 +118,28 @@ const WeightManagementPage = () => {
         }
     }, [success]);
 
+    // Saves Target Weight Class Per User
+    function saveUserTarget(userId, weightClass) {
+        localStorage.setItem(`targetClass_${userId}`, weightClass);
+    }
+
+    // Load Target Weight When User Changes
+    useEffect(() => {
+        if (!userId) return;
+
+        const stored = localStorage.getItem(`targetClass_${userId}`);
+
+        if (stored) {
+            setTargetWeightClass(stored);
+
+            const classes =
+                gender === "Men" ? mensWeightClasses : womensWeightClasses;
+
+            const found = classes.find(weightclass => weightclass.name === stored);
+            if (found) setChartTarget(found.max);
+        }
+    }, [userId]);
+
     const weightClasses = gender === 'Men' ? mensWeightClasses : gender === 'Women' ? womensWeightClasses : [];
     const selectedClass = weightClasses.find(x => x.name === targetWeightClass);
 
@@ -154,12 +178,17 @@ const WeightManagementPage = () => {
         setError('');
         setSuccess('');
 
-        if (!userId) return setError("Please select a user.");
-        if (!gender) return setError("Please select gender.");
+        if (!userId)
+            return setError("Please select a user.");
+        if (!gender)
+            return setError("Please select gender.");
         const lbs = Number(currentWeight);
-        if (!lbs || lbs <= 0) return setError("Please enter a valid weight (lbs.).");
-        if (!targetWeightClass) return setError("Please select a weight class.");
-        if (!date) return setError("Please select a date.");
+        if (!lbs || lbs <= 0)
+            return setError("Please enter a valid weight (lbs.).");
+        if (!targetWeightClass)
+            return setError("Please select a weight class.");
+        if (!date)
+            return setError("Please select a date.");
 
         try {
             const saved = await createWeighIn({
@@ -230,8 +259,16 @@ const WeightManagementPage = () => {
                 <input type="number" value={weight} onChange={e => setWeight(e.target.value)} />
                 <input type="date" value={date} onChange={e => setDate(e.target.value)} />
                 <input type="text" value={notes} onChange={e => setNotes(e.target.value)} />
-                <button onClick={() => onSave({ weight: Number(weight), date, notes })}>Save</button>
-                <button onClick={onCancel}>Cancel</button>
+                <button
+                    className='save-edit-button'
+                    onClick={() => onSave({ weight: Number(weight), date, notes })}>
+                    Save
+                </button>
+                <button
+                    className='cancel-edit-button'
+                    onClick={onCancel}>
+                    Cancel
+                </button>
             </div>
         );
     };
@@ -255,10 +292,13 @@ const WeightManagementPage = () => {
         }
     }
 
+    const showWeightForm =
+        role !== 'admin' || (role === 'admin' && showAdminForm && selectedUserId);
+
     return (
         <div className="weight-container">
-            <h2 className="weight-header">Weight Management</h2>
-                  <div className="role-toggle">
+            <h2 className="weight-header">Weight Management Dashboard</h2>
+            <div className="role-toggle">
                 <label className="switch">
                     <input
                         type="checkbox"
@@ -271,15 +311,14 @@ const WeightManagementPage = () => {
             </div>
             {role === 'admin' ? (
                 <div className="role-banner admin-banner">
-                    👑 Admin Dashboard — Viewing All Users
+                    👑 Admin Dashboard (All Users Visible)
                 </div>
             ) : (
                 <div className="role-banner user-banner">
                     👤 My Weight Tracker
                 </div>
             )}
-      
-            {/* Admin user selector */}
+
             {role === 'admin' && users.length > 0 && (
                 <div className="user-selector">
                     <label>Demo User:</label>
@@ -315,123 +354,166 @@ const WeightManagementPage = () => {
                 </div>
             )}
             <div className='section'>
-                <div className='form-card'>
+                {showWeightForm && (
+                    <div className='form-card'>
 
-                    <div className="weight-recording-form">
-                        <label>Gender:</label>
-                        <select value={gender} onChange={(e) => setGender(e.target.value)}>
-                            <option value="">Select Gender</option>
-                            <option value="Men">Men</option>
-                            <option value="Women">Women</option>
-                        </select>
-                    </div>
-
-                    <div className="weight-recording-form">
-                        <label>Current Weight (lbs):</label>
-                        <input type="number" value={currentWeight} onChange={e => setCurrentWeight(e.target.value)} placeholder="Enter your current weight (lbs.)" />
-                    </div>
-
-                    <div className="weight-recording-form">
-                        <label>Target Weight Class: </label>
-                        <select value={targetWeightClass} onChange={(e) => setTargetWeightClass(e.target.value)} disabled={!gender}>
-                            <option value="">Select Class</option>
-                            {weightClasses.map(x => <option key={x.name} value={x.name}>{x.name} {x.max !== Infinity ? `(<= ${x.max} lbs)` : '(> 198 lbs)'}</option>)}
-                        </select>
-                    </div>
-
-                    <form onSubmit={saveWeighIn} className="weight-recording-form">
-                        <div>
-                            <label htmlFor="date">Date:</label>
-                            <input type='date' id="date" value={date} onChange={e => setDate(e.target.value)} placeholder="Enter the date" />
+                        <div className="weight-recording-form">
+                            <label>Gender:</label>
+                            <select value={gender} onChange={(e) => setGender(e.target.value)}>
+                                <option value="">Select Gender</option>
+                                <option value="Men">Men</option>
+                                <option value="Women">Women</option>
+                            </select>
                         </div>
-                        <div>
-                            <label htmlFor="notes">Notes:</label>
-                            <input id="notes" value={notes} onChange={e => setNotes(e.target.value)} placeholder="Type your notes here..." />
+
+                        <div className="weight-recording-form">
+                            <label>Current Weight (lbs):</label>
+                            <input type="number" value={currentWeight} onChange={e => setCurrentWeight(e.target.value)} placeholder="Enter your current weight (lbs.)" />
                         </div>
-                        <Button type="submit" label="Save Weight" disabled={!currentWeight || Number(currentWeight) <= 0 || !date} className={"save-weight-button"} />
-                        {success && <div className="success-message">{success}</div>}
-                        {error && <div className="error-message">{error}</div>}
-                    </form>
-                </div>
 
-                <div className="get-status">
-                    <br />
-                    {getStatus()}
-                </div>
+                        <div className="weight-recording-form">
+                            <label>Target Weight Class: </label>
+                            <select
+                                value={targetWeightClass}
+                                onChange={(e) => {
+                                    const selected = e.target.value;
+                                    setTargetWeightClass(selected);
 
-                <div className='section'>
-                    {sortedHistory.length > 0 && (
-                        <div className="recharts-container">
-                            <h3>Weight History & Progress</h3>
-                            <ResponsiveContainer width="100%" height={350}>
-                                <LineChart
-                                    data={sortedHistory}
-                                    margin={{ top: 20, right: 50, left: 20, bottom: 20 }}>
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis
-                                        dataKey="date" />
-                                    <YAxis
-                                        domain={['auto', 'auto']} allowDecimals />
-                                    <Tooltip
-                                        formatter={(value) => `${value} lbs`}
-                                        labelFormatter={(date) => `Date: ${date}`}
+                                    const found = weightClasses.find(c => c.name === selected);
+                                    if (found) setChartTarget(found.max);
+
+                                    saveUserTarget(userId, selected);
+                                }}
+                                disabled={!gender}>
+                                <option value="">Select Class</option>
+                                {weightClasses.map(x => <option key={x.name} value={x.name}>{x.name} {x.max !== Infinity ? `(<= ${x.max} lbs)` : '(> 198 lbs)'}</option>)}
+                            </select>
+                        </div>
+                        <form onSubmit={saveWeighIn} className="weight-recording-form">
+                            <div>
+                                <label htmlFor="date">Date:</label>
+                                <input type='date' id="date" value={date} onChange={e => setDate(e.target.value)} placeholder="Enter the date" />
+                            </div>
+                            <div>
+                                <label htmlFor="notes">Notes:</label>
+                                <input id="notes" value={notes} onChange={e => setNotes(e.target.value)} placeholder="Type your notes here..." />
+                            </div>
+                            <Button type="submit" label="Save Weight" disabled={!currentWeight || Number(currentWeight) <= 0 || !date} className={"save-weight-button"} />
+                            {success && <div className="success-message">{success}</div>}
+                            {error && <div className="error-message">{error}</div>}
+                        </form>
+                    </div>
+                )}
+            </div>
+
+            <div className="get-status">
+                <br />
+                {getStatus()}
+            </div>
+
+            <div className='section'>
+                {sortedHistory.length > 0 && (
+                    <div className="recharts-container">
+                        <h3>Weight History & Progress</h3>
+                        <ResponsiveContainer width="100%" height={350}>
+                            <LineChart
+                                data={sortedHistory}
+                                margin={{ top: 20, right: 50, left: 20, bottom: 20 }}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis
+                                    dataKey="date" />
+                                <YAxis
+                                    domain={['auto', 'auto']} allowDecimals />
+                                <Tooltip
+                                    formatter={(value) => `${value} lbs`}
+                                    labelFormatter={(date) => `Date: ${date}`}
+                                />
+                                {chartTarget && chartTarget !== Infinity && (
+                                    <ReferenceLine
+                                        y={chartTarget}
+                                        stroke="green"
+                                        strokeWidth={3}
+                                        strokeDasharray="6 6"
+                                        label={{
+                                            value: `Target: ${chartTarget} lbs`,
+                                            position: "right"
+                                        }}
                                     />
-                                    {selectedClass && selectedClass.max !== Infinity && (
-                                        <ReferenceLine y={selectedClass.max} stroke="green" strokeDasharray="5 5" label="Target" />
-                                    )}
-                                    <Line type="monotone" dataKey="weight" stroke="#e63946" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 8 }} />
-                                </LineChart>
-                            </ResponsiveContainer>
-                            {latest && (
-                                <div className="latest-weight">
-                                    Latest Weight: <strong>{latest.weight} lbs</strong> on {latest.date}
-                                </div>
-                            )}
-                        </div>
-
-                    )}
-                </div>
-
-                <div className='section'>
-                    <div className="weight-history table-wrapper">
-                        {sortedHistory.length > 0 && (
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Weight</th>
-                                        <th>Notes</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {sortedHistory.map(weight => (
-                                        <tr key={weight.id}>
-                                            {editingId === weight.id ? (
-                                                <td colSpan={4}>
-                                                    <EditRow
-                                                        weightEntry={weight}
-                                                        onSave={(updatedValues) => { handleUpdate(weight.id, updatedValues); setEditingId(null); }}
-                                                        onCancel={() => setEditingId(null)}
-                                                    />
-                                                </td>
-                                            ) : (
-                                                <>
-                                                    <td>{weight.date}</td>
-                                                    <td>{weight.weight} lbs</td>
-                                                    <td>{weight.notes || '-'}</td>
-                                                    <td>
-                                                        <button className='update-button' onClick={() => setEditingId(weight.id)}>Edit</button>
-                                                        <button className='delete-button' onClick={() => handleDelete(weight.id)}>Delete</button>
-                                                    </td>
-                                                </>
-                                            )}
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                )}
+                                <Line
+                                    type="monotone"
+                                    dataKey="weight"
+                                    stroke="#e63946"
+                                    strokeWidth={3}
+                                    dot={{ r: 4 }}
+                                    activeDot={{ r: 8 }} />
+                            </LineChart>
+                        </ResponsiveContainer>
+                        {latest && (
+                            <div className="latest-weight">
+                                Latest Weight: <strong>{latest.weight} lbs</strong> on {latest.date}
+                            </div>
                         )}
                     </div>
+
+                )}
+            </div>
+
+            <div className='section'>
+                <div className="weight-history table-wrapper">
+                    {sortedHistory.length > 0 && (
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Weight</th>
+                                    <th>Notes</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {sortedHistory.map(weight => (
+                                    <tr key={weight.id}>
+                                        {editingId === weight.id ? (
+                                            <td colSpan={4}>
+                                                <EditRow
+                                                    weightEntry={weight}
+                                                    onSave={(updatedValues) => { handleUpdate(weight.id, updatedValues); setEditingId(null); }}
+                                                    onCancel={() => setEditingId(null)}
+                                                />
+                                            </td>
+                                        ) : (
+                                            <>
+                                                <td>{weight.date}</td>
+                                                <td>{weight.weight} lbs</td>
+                                                <td>{weight.notes || '-'}</td>
+                                                <td>
+                                                    <button className='update-button'
+                                                        onClick={() => setEditingId(weight.id)}>
+                                                        Edit
+                                                    </button>
+                                                    <button className='delete-button'
+                                                        onClick={() => handleDelete(weight.id)}>
+                                                        Delete
+                                                    </button>
+                                                </td>
+                                            </>
+                                        )}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    )}
+                    {role === 'admin' && selectedUserId && (
+                        <div>
+                            <button
+                                className="admin-add-weight-button"
+                                onClick={() => setShowAdminForm(prev => !prev)}
+                            >
+                                ➕ Add Weight for This User
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
