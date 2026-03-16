@@ -192,17 +192,13 @@ input:checked+.slider:before {
 }
 
 
-.admin-user-selector select {
+.user-selector select {
   position: relative;
   color: black;
   background-color: #f0f0f0;
   padding: 8px;
   border-radius: 6px;
   font-size: 16px;
-}
-
-.demo-user-selector {
-  position: relative;
 }
 
 .form-card {
@@ -216,4 +212,59 @@ input:checked+.slider:before {
 .section {
   margin: 40px auto;
   max-width: 900px;
+}
+
+.edit-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.latest-weight {
+  background: #b7e5a8;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .weight-container {
+    padding: 20px;
+  }
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  width: 100%;
+}
+
+@media (max-width:768px) {
+
+  .edit-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .edit-row input {
+    width: 100%;
+  }
+
+}
+
+@media (max-width:768px) {
+  .weight-header {
+    font-size: 32px;
+  }
+}
+
+@media (max-width:768px) {
+
+  .update-button,
+  .delete-button {
+    width: 55px;
+    height: 35px;
+    font-size: 12px;
+  }
+
 }
