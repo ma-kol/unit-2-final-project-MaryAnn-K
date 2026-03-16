@@ -45,7 +45,6 @@ const WeightManagementPage = () => {
     const [role, setRole] = useState('user');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
-    const [loading, setLoading] = useState(true);
 
     // Decide which userId to use
     const userId = role === 'admin' ? selectedUserId : currentUserId;
@@ -70,7 +69,8 @@ const WeightManagementPage = () => {
     }, [role]);
 
     useEffect(() => {
-        if (role !== 'admin') return;
+        if (role !== 'admin')
+            return;
 
         const fetchWeights = async () => {
             try {
@@ -87,12 +87,13 @@ const WeightManagementPage = () => {
     }, [role]);
 
     useEffect(() => {
-        if (role === 'admin') return;
+        if (role === 'admin')
+            return;
 
-        if (!currentUserId) return;
+        if (!currentUserId)
+            return;
 
         const fetchUserWeights = async () => {
-            setLoading(true);
             try {
                 const data = await getWeighInsForUser(currentUserId);
                 setHistory(data);
@@ -102,8 +103,6 @@ const WeightManagementPage = () => {
                 }
             } catch (e) {
                 setError(e.message);
-            } finally {
-                setLoading(false);
             }
         };
 
@@ -259,7 +258,7 @@ const WeightManagementPage = () => {
     return (
         <div className="weight-container">
             <h2 className="weight-header">Weight Management</h2>
-            <div className="role-toggle">
+                  <div className="role-toggle">
                 <label className="switch">
                     <input
                         type="checkbox"
@@ -270,6 +269,16 @@ const WeightManagementPage = () => {
                 </label>
                 <span className="role-label">{role === 'admin' ? 'Admin' : 'User'}</span>
             </div>
+            {role === 'admin' ? (
+                <div className="role-banner admin-banner">
+                    👑 Admin Dashboard — Viewing All Users
+                </div>
+            ) : (
+                <div className="role-banner user-banner">
+                    👤 My Weight Tracker
+                </div>
+            )}
+      
             {/* Admin user selector */}
             {role === 'admin' && users.length > 0 && (
                 <div className="user-selector">
@@ -349,8 +358,6 @@ const WeightManagementPage = () => {
                     <br />
                     {getStatus()}
                 </div>
-
-                {loading && <p>Loading weight history...</p>}
 
                 <div className='section'>
                     {sortedHistory.length > 0 && (
