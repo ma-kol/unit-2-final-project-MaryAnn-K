@@ -135,7 +135,7 @@ const WeightManagementPage = () => {
             const classes =
                 gender === "Men" ? mensWeightClasses : womensWeightClasses;
 
-            const found = classes.find(weightclass => weightclass.name === stored);
+            const found = classes.find(weightClass => weightClass.name === stored);
             if (found) setChartTarget(found.max);
         }
     }, [userId]);
@@ -143,21 +143,26 @@ const WeightManagementPage = () => {
     const weightClasses = gender === 'Men' ? mensWeightClasses : gender === 'Women' ? womensWeightClasses : [];
     const selectedClass = weightClasses.find(x => x.name === targetWeightClass);
 
-    const displayHistory = (() => {
-        const list = role === 'admin'
-            ? allUsersHistory.filter(entry => entry.user.id === selectedUserId)
-            : history;
-        return list;
-    })();
+    let displayHistory = [];
+
+    if (role === "admin") {
+        displayHistory = allUsersHistory.filter(
+            weightEntry => weightEntry.user.id === selectedUserId
+        );
+    } else {
+        displayHistory = history;
+    }
 
     const sortedHistory = [...displayHistory]
-        .map(entry => ({
-            ...entry,
-            weight: Number(entry.weight)
+        .map(weightEntry => ({
+            ...weightEntry,
+            weight: Number(weightEntry.weight)
         }))
         .sort((a, b) => new Date(a.date) - new Date(b.date));
+
     const getStatus = () => {
-        if (!currentWeight || !selectedClass) return '';
+        if (!currentWeight || !selectedClass)
+            return '';
         if (selectedClass.max === Infinity) {
             return currentWeight > 198
                 ? 'You qualify for Super Heavyweight!'
@@ -182,13 +187,21 @@ const WeightManagementPage = () => {
             return setError("Please select a user.");
         if (!gender)
             return setError("Please select gender.");
+
         const lbs = Number(currentWeight);
+
         if (!lbs || lbs <= 0)
             return setError("Please enter a valid weight (lbs.).");
         if (!targetWeightClass)
             return setError("Please select a weight class.");
         if (!date)
             return setError("Please select a date.");
+
+        const today = new Date().toLocaleDateString("en-CA");
+
+        if (date > today) {
+            return setError("Date cannot be in the future.");
+        }
 
         try {
             const saved = await createWeighIn({
@@ -254,11 +267,25 @@ const WeightManagementPage = () => {
         const [date, setDate] = useState(weightEntry.date);
         const [notes, setNotes] = useState(weightEntry.notes || '');
 
+        const today = new Date().toLocaleDateString("en-CA");
+
+
         return (
             <div className='edit-row'>
-                <input type="number" value={weight} onChange={e => setWeight(e.target.value)} />
-                <input type="date" value={date} onChange={e => setDate(e.target.value)} />
-                <input type="text" value={notes} onChange={e => setNotes(e.target.value)} />
+                <input
+                    type="number"
+                    value={weight}
+                    onChange={e => setWeight(e.target.value)} />
+                <input
+                    type="date"
+                    id="date"
+                    value={date}
+                    max={today}
+                    onChange={e => setDate(e.target.value)} />
+                <input
+                    type="text"
+                    value={notes}
+                    onChange={e => setNotes(e.target.value)} />
                 <button
                     className='save-edit-button'
                     onClick={() => onSave({ weight: Number(weight), date, notes })}>
@@ -389,7 +416,9 @@ const WeightManagementPage = () => {
                                 {weightClasses.map(x => <option key={x.name} value={x.name}>{x.name} {x.max !== Infinity ? `(<= ${x.max} lbs)` : '(> 198 lbs)'}</option>)}
                             </select>
                         </div>
-                        <form onSubmit={saveWeighIn} className="weight-recording-form">
+                        <form
+                            onSubmit={saveWeighIn}
+                            className="weight-recording-form">
                             <div>
                                 <label htmlFor="date">Date:</label>
                                 <input type='date' id="date" value={date} onChange={e => setDate(e.target.value)} placeholder="Enter the date" />
@@ -435,8 +464,11 @@ const WeightManagementPage = () => {
                                         strokeWidth={3}
                                         strokeDasharray="6 6"
                                         label={{
-                                            value: `Target: ${chartTarget} lbs`,
-                                            position: "right"
+                                            value: `${chartTarget}`,
+                                            position: "right",
+                                            fill: "green",
+                                            fontSize: 14,
+                                            fontWeight: "bold"
                                         }}
                                     />
                                 )}
