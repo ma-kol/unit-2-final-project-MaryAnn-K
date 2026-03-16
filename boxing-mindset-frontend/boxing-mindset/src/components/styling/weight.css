@@ -266,6 +266,7 @@ input:checked+.slider:before {
   font-weight: bolder;
 }
 
+/* Phone breakpoint */
 @media (max-width: 768px) {
   .weight-container {
     padding: 20px;
@@ -303,6 +304,19 @@ input:checked+.slider:before {
     width: 55px;
     height: 35px;
     font-size: 12px;
+  }
+
+}
+
+/* Tablet breakpoint */
+@media (max-width: 1024px) {
+
+  .weight-container {
+    padding: 30px;
+  }
+
+  .weight-header {
+    font-size: 36px;
   }
 
 }
