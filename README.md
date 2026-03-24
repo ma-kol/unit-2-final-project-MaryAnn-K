@@ -12,7 +12,7 @@ Built with a **React** frontend, **Spring Boot** backend, and **MySQL** database
 🥊 A one-stop platform to help boxers stay on top of their training and progress.
 
 <!--Technologies Used-->
-## 🎨 Tech Stack
+## 🛠️ Tech Stack
 - Frontend
   - React
   - React Router
@@ -29,7 +29,22 @@ Built with a **React** frontend, **Spring Boot** backend, and **MySQL** database
   - MYSQL Database
  
 <!--Installation Steps-->
+## 🚀 Prerequisites & Installation
+> [!NOTE]
+> To run this project locally, you will need the following installed:
+> - Node.js (LTS version)
+> - npm or yarn
+> - Java Development Kit (JDK) 21
+> - Maven
+> - MySQL Server (version 8.0+)
 
+### Back End Setup (Java/Spring Boot/MySQL)
+
+1.  **Clone the repository:** In the terminal, navigate to the directory where you want the project to live, then execute the following commands:
+    ```shell
+    git clone https://github.com/ma-kol/unit-2-final-project-MaryAnn-K.git # or your link, if forked
+    cd unit-2-final-project-MaryAnn-K/boxing-mindset-backend
+    ```
 <!--Wireframes-->
 <!--ER Diagram-->
 <!--Description of unsolved problems or future features-->
