@@ -40,10 +40,24 @@ Built with a **React** frontend, **Spring Boot** backend, and **MySQL** database
 
 ### Back End Setup (Java/Spring Boot/MySQL)
 
-1.  **Clone the repository:** In the terminal, navigate to the directory where you want the project to live, then execute the following commands:
+1️⃣ **Clone the repository:** In the terminal, navigate to the directory where you want the project to live, then execute the following commands:
     ```shell
     git clone https://github.com/ma-kol/unit-2-final-project-MaryAnn-K.git # or your link, if forked
     cd unit-2-final-project-MaryAnn-K/boxing-mindset-backend
+    ```
+
+2️⃣ **Configure secrets for database:** Create a new MySQL database named `weigh-in` and another one named `users`, then create an `.env` file at the project root directory (`boxing-mindset-backend`): 
+    ```properties
+    # Location of your local database server
+    DB_HOST=localhost
+    DB_PORT=3306
+    
+    # Database name
+    DB_NAME=boxing-mindset
+    
+    # Credentials
+    DB_USER=root
+    DB_PASS=[your_password]
     ```
 <!--Wireframes-->
 <!--ER Diagram-->
