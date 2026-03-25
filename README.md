@@ -121,6 +121,14 @@ http://localhost:5173
   <summary>https://www.figma.com/design/h9nswSyeNU0e5e65vVtXcv/Boxing-Mindset-Wireframes?node-id=1-2&t=7NO5iy3CxDaZOR2e-0</summary>
 </details>
 
+## Weight Management Feature User Views
+<img width="1210" height="992" alt="Image" src="https://github.com/user-attachments/assets/16183079-930a-4342-b6f8-50eb6fd91f48" />
+
+<img width="1161" height="1014" alt="Image" src="https://github.com/user-attachments/assets/e7419664-adea-499f-b011-b5f5c9f5e301" />
+
+## Weight Management Feature Admin View
+<img width="1215" height="1181" alt="Image" src="https://github.com/user-attachments/assets/06a50b2e-1a5e-43b3-9126-45d5e18eb6d1" />
+
 <!--ER Diagram-->
 ## 📊 Entity Relationship Diagram (ERD)
 
