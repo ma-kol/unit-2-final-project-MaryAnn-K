@@ -2,7 +2,7 @@
   <h1>Boxing Mindset: Full-Stack Web Application</h1>
 </div>
 
-<img width="1037" height="1152" alt="Image" src="https://github.com/user-attachments/assets/29110263-cb91-43a9-9d83-8e3fdaa0c9a2" />
+<img width="1246" height="1167" alt="Image" src="https://github.com/user-attachments/assets/b2f3cf16-fed6-4087-b701-351371ad8ef1" />
 
 <!--Elevator Pitch-->
 ## 💡 About the Project
