@@ -1,5 +1,5 @@
 <div align=center>
-  #**Boxing Mindset: Full-Stack Web Application**
+  <h1>Boxing Mindset: Full-Stack Web Application</h1>
 </div>
 
 <!--Elevator Pitch-->
