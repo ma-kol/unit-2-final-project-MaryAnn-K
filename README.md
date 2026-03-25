@@ -87,6 +87,7 @@ http://localhost:8080
 ---
 
 ### Front End Setup (React/Vite)
+
 1️⃣ **Navigate to the front end project directory:** 
     ```shell
     cd ../boxing-mindset-frontend/boxing-mindset
@@ -148,5 +149,26 @@ weight_entry ↔️ user_account: Many-to-One
 <details>
 <summary>https://dbdiagram.io/d/ERD-Boxing-Mindset-SQL-DBD-69929aa9bd82f5fce2c946ae</summary>
 </details>
+
+---
+
+## ⚙️ API Endpoints
+
+## Weigh-Ins 🥊
+
+| Method | Endpoint | Description |
+|------|------|------|
+| GET | /api/weigh-ins | Retrieve all weigh-ins |
+| GET | /api/weigh-ins/user/{userId} | Retrieve all weigh-ins for a specific user (sorted by newest first) |
+| GET | /api/weigh-ins/latest/{userId} | Retrieve the latest weigh-in for a specific user |
+| POST | /api/weigh-ins/add  | Create a new weigh-in |
+| PUT | /api/weigh-ins/{id} | Update an existing weigh-in |
+| DELETE | /api/weigh-ins/{id} | Delete a weigh-in |
+
+## Users 👤
+
+| Method | Endpoint | Description |
+|------|------|------|
+| GET | /api/users | Retrieve all users |
 
 <!--Description of unsolved problems or future features-->
