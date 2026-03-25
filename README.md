@@ -179,6 +179,22 @@ weight_entry ↔️ user_account: Many-to-One
 | GET | /api/users | Retrieve all users |
 
 <!--Description of unsolved problems or future features-->
+## 🌟 Future Enhancements
+
+This project is designed with scalability in mind, with several planned features to enhance both functionality and user experience:
+
+- **⏱️ Advanced Interval Timer**  
+  Expand the timer into a fully customizable training tool with configurable rounds, rest periods, and audio/visual cues tailored for boxing workouts.
+
+- **📅 Class Attendance Tracking**  
+  Introduce a class management system where users can join sessions and coaches can track attendance for improved accountability and progress monitoring.
+
+- **🔐 Full Authentication & Authorization**  
+  Implement secure user authentication (signup/login) with role-based access control to support both athletes and coaches.
+
+- **🥊 AI-Generated Boxing Drills**  
+  Integrate AI to generate personalized boxing drills based on user goals and progress, seamlessly paired with the interval timer for guided workouts.
+
 
 ## 👩‍💻 Author
 Mary Ann K.
