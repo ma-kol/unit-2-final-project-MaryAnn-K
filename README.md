@@ -125,28 +125,29 @@ http://localhost:5173
 The database is designed to support a weight tracking system for users, allowing them to record and monitor their weight over time. The schema focuses on simplicity while maintaining a clear relationship between users and their weight history.
 
 ### 🧩 Entities
-user_account
+*user_account*
 
 Stores all registered users in the system.
 
-Fields:
+| Field | Description |
+|------|------------|
+| id (Primary Key) | Unique identifier for each user |
+| email | User’s email address |
+| display_name | Public-facing name of the user |
+| role | Defines user permissions (`user` or `coach`) |
+| created_at | Timestamp of when the account was created |
 
-id (Primary Key) – Unique identifier for each user
-email – User’s email address
-display_name – Public-facing name of the user
-role – Defines user permissions (user or coach)
-created_at – Timestamp of when the account was created
-weight_entry
+*weight_entry*
 
 Stores individual weight records for users over time.
 
-Fields:
-
-id (Primary Key) – Unique identifier for each weight entry
-user_id (Foreign Key) – References user_account.id
-recorded_at – Date and time of the weigh-in
-weight_lbs – Recorded weight in pounds
-notes – Optional notes related to the weigh-in
+| Field | Description |
+|------|------------|
+| id (Primary Key) | Unique identifier for each weight entry |
+| user_id (Foreign Key) | References user_account.id |
+| recorded_at | Date and time of the weigh-in |
+| weight_lbs | Recorded weight in pounds |
+| notes | Optional notes related to the weigh-in |
 
 ### 🔗 Relationships
 user_account ↔️ weight_entry: One-to-Many
