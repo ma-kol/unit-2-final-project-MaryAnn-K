@@ -6,7 +6,7 @@
 
 <!--Elevator Pitch-->
 ## 💡 About the Project
-Boxing Mindset is a full-stack web application designed to serve as a "one-stop" solution for amateur boxers to manage and enhance their training. The app includes the following features:
+Boxing Mindset is a full-stack web application designed to serve as a "one-stop" solution for amateur boxers to manage and enhance their training. The app includes the following key features:
 - Weight Management: Log weigh-ins, monitor trends, and match boxing weight classes
 - Interval Timer (in development): Structured rounds with rest alerts
 - Class Attendance (in development): Track gym participation and consistency
