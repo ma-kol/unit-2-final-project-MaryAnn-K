@@ -72,7 +72,22 @@ CREATE DATABASE weigh_in;
 CREATE DATABASE users;
 ```
 
-4️⃣ **Run the Java/Spring Boot application:** If you do not have the application loaded in an IDE such as IntelliJ, go to the terminal and navigate to the root directory of the backend project. Then execute the following command to build and run the application (Hibernate will automatically create the tables): 
+4️⃣ **Create Users**
+
+Before logging weigh-ins, you’ll need at least one user in the database. Run the following commands in MySQL:
+
+```sql
+-- Create a regular user
+INSERT INTO users (email, display_name, role, created_at)
+VALUES ('jane.doe@example.com', 'Jane Doe', 'user', NOW());
+
+-- Create an admin/coach user
+INSERT INTO user_account (email, display_name, role, created_at)
+VALUES ('coach.mary@example.com', 'Coach Mary', 'coach', NOW());
+
+🟢 After running these commands, the frontend will be able to select users and log weigh-ins.
+
+5️⃣ **Run the Java/Spring Boot application:** If you do not have the application loaded in an IDE such as IntelliJ, go to the terminal and navigate to the root directory of the backend project. Then execute the following command to build and run the application (Hibernate will automatically create the tables): 
 
 ```bash
 mvn spring-boot:run
