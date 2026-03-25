@@ -43,8 +43,7 @@ Built with a **React** frontend, **Spring Boot** backend, and **MySQL** database
 ### Back End Setup (Java/Spring Boot/MySQL)
 
 1️⃣ **Clone the repository:** In the terminal, navigate to the directory where you want the project to live, then execute the following commands:
-    ```
-    shell
+    ```shell
     git clone https://github.com/ma-kol/unit-2-final-project-MaryAnn-K.git # or your link, if forked
     cd unit-2-final-project-MaryAnn-K/boxing-mindset-backend
     ```
@@ -66,8 +65,7 @@ Built with a **React** frontend, **Spring Boot** backend, and **MySQL** database
 
 3️⃣ **Create the database** Open MySQL and run:
 
-```
-sql
+```sql
 CREATE DATABASE weigh_in;
 CREATE DATABASE users;
 ```
