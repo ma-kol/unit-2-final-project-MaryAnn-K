@@ -111,7 +111,13 @@ http://localhost:5173
 
 ---
 <!--Wireframes-->
+## 📸 Key Visuals
 
+### Wireframes
+
+<details>
+  <summary>https://www.figma.com/design/h9nswSyeNU0e5e65vVtXcv/Boxing-Mindset-Wireframes?node-id=1-2&t=7NO5iy3CxDaZOR2e-0</summary>
+</details>
 
 <!--ER Diagram-->
 ## 📊 Entity Relationship Diagram (ERD)
@@ -172,3 +178,10 @@ weight_entry ↔️ user_account: Many-to-One
 | GET | /api/users | Retrieve all users |
 
 <!--Description of unsolved problems or future features-->
+
+## 👩‍💻 Author
+Mary Ann K.
+
+## 📄 License
+
+This project was developed for educational purposes as part of the **LaunchCode Software Development Program**.
