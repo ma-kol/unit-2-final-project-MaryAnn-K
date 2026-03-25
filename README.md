@@ -11,7 +11,7 @@ Boxing Mindset is a full-stack web application designed to serve as a "one-stop"
 
 Built with a **React** frontend, **Spring Boot** backend, and **MySQL** database, the app provides a solid foundation for future features like user authentication, AI-driven training recommendations, and analytics.
 
-🥊 A one-stop platform to help boxers stay on top of their training and progress.
+🥊 Boxing Mindset is a "one-stop" platform to help boxers stay on top of their training and progress.
 
 <!--Technologies Used-->
 ## 🛠️ Tech Stack
