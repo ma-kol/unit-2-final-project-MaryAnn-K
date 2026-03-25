@@ -84,6 +84,7 @@ VALUES ('jane.doe@example.com', 'Jane Doe', 'user', NOW());
 -- Create an admin/coach user
 INSERT INTO user_account (email, display_name, role, created_at)
 VALUES ('coach.mary@example.com', 'Coach Mary', 'coach', NOW());
+```
 
 🟢 After running these commands, the frontend will be able to select users and log weigh-ins.
 
