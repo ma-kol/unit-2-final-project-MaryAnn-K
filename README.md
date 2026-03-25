@@ -2,6 +2,8 @@
   <h1>Boxing Mindset: Full-Stack Web Application</h1>
 </div>
 
+<img width="1037" height="1152" alt="Image" src="https://github.com/user-attachments/assets/29110263-cb91-43a9-9d83-8e3fdaa0c9a2" />
+
 <!--Elevator Pitch-->
 ## 💡 About the Project
 Boxing Mindset is a full-stack web application designed to serve as a "one-stop" solution for amateur boxers to manage and enhance their training. The app includes the following features:
